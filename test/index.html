@@ -2,9 +2,9 @@
   <head>
     <link rel="stylesheet" href="index.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/css/ol.css" type="text/css">
-    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/build/ol.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v5.3.0/build/ol.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/vuelayers/lib/style.css">
+    <script src="https://unpkg.com/vuelayers/lib/index.umd.js"></script>
   </head>
   <body>
 
@@ -41,20 +41,16 @@
         <button v-on:click="addFactionToCampaign">Add faction to campaign</button>
       </div>
 
+      <vl-map style="height: 600px"
+        data-projection="EPSG:4326"
+        :load-tiles-while-animating="true"
+        :load-tiles-while-interacting="true">
+        <vl-view :zoom.sync="map.zoom" :center.sync="map.center" :rotation.sync="map.rotation"></vl-view>
+        <vl-layer-tile id="osm"><vl-source-osm></vl-source-osm></vl-layer-tile>
+      </vl-map>
+
     </div>
     <script src="index.js"></script>
-
-    <div id="map" style="height: 700px; width: 100%;"></div>
-    <script type="text/javascript">
-      var map = new ol.Map({
-        target: 'map',
-        layers: [new ol.layer.Tile({source: new ol.source.OSM()})],
-        view: new ol.View({
-          center: ol.proj.fromLonLat([40, 43]),
-          zoom: 7
-        })
-      });
-    </script>
 
   </body>
 </html>

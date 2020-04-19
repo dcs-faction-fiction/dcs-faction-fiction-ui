@@ -1,5 +1,7 @@
 const API_URL = "http://localhost:8080"
 
+Vue.use(VueLayers)
+
 var app = new Vue({ 
   el: '#root',
   data: {
@@ -12,7 +14,12 @@ var app = new Vue({
     selectedCampaign: '',
     selectedFaction: '',
     selectedCampaignFaction: '',
-    units: []
+    units: [],
+    map: {
+      zoom: 7,
+      center: [41, 43],
+      rotation: 0
+    }
   },
   methods: {
     getRequest: function(url, consumer) {
