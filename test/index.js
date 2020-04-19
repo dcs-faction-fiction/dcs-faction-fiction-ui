@@ -15,7 +15,11 @@ var app = new Vue({
     selectedFaction: '',
     selectedCampaignFaction: '',
     credits: 0,
-    warehouse: [],
+    estimate: 0,
+    warehouse: {},
+    newBasketName: "UH_1H",
+    newBasketAmount: 1,
+    basket: {},
     units: [],
     map: {
       zoom: 7,
@@ -123,6 +127,36 @@ var app = new Vue({
       }
       this.setRequest('post', '/campaignmanager-api/campaigns/'+this.selectedCampaign+'/factions', req, data => {
         this.fetchPicklists()
+      })
+    },
+    emptybBasket: function() {
+      this.basket = {}
+      this.estimate = 0
+    },
+    addToBasket: function() {
+      var count = this.basket[this.newBasketName]
+      count = count ? count : 0
+      count = count + this.newBasketAmount
+      this.basket[this.newBasketName] = count
+      this.calculateBasket()
+    },
+    calculateBasket: function() {
+      var req = {items: []}
+      for (const prop in this.basket) {
+        req.items.push({name: prop, amount: this.basket[prop]})
+      }
+      this.setRequest('post', '/common-api/warehouseestimate', req, data => {
+        this.estimate = data
+      })
+    },
+    buyBasket: function() {
+      var req = {items: []}
+      for (const prop in this.basket) {
+        req.items.push({name: prop, amount: this.basket[prop]})
+      }
+      this.setRequest('post', '/factionmanager-api/factions/'+this.selectedFaction+'/campaigns/'+this.selectedCampaign+'/warehouse', req, data => {
+        this.emptybBasket()
+        this.fetchAll()
       })
     }
   },

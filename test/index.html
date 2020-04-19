@@ -43,6 +43,14 @@
         </div>
 
         <div>
+          <input :value="newBasketName"/> <input :value="newBasketAmount"/>
+          <button v-on:click="addToBasket">+</button><br/>
+          Basket({{ estimate }}): {{ basket }} <button v-on:click="emptybBasket">X</button>
+          <br/>
+          <button v-on:click="buyBasket">&gt; BUY &lt;</button>
+          <br/>
+          <br/>
+          Credits: {{ credits }}<br/>
           Warehouse: {{ warehouse }}
         </div>
       </div>
