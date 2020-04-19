@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <div>Token: <input v-model="token"/></div>
+      <div>
+        Campaings:
+        <select v-model="selectedCampaign">
+          <option v-for="s in campaigns">{{s}}</option>
+        </select>
+        <button v-on:click="addCampaign">+</button>
+      </div>
+      
+      <div>
+        Factions:
+        <select v-model="selectedFaction">
+          <option v-for="s in factions">{{s}}</option>
+        </select>
+        <button v-on:click="addFaction">+</button>
+      </div>
+
+      <div>
+        Airbases:
+        <select v-model="selectedAirbase">
+          <option v-for="s in airbases">{{s}}</option>
+        </select>
+      </div>
+
+      <div>
+        Campaign factions:
+        <select v-model="selectedCampaignFaction">
+          <option v-for="s in campaignFactions" v-bind:value="s.faction">{{s.airbase}} ({{s.faction}})</option>
+        </select>
+        <button v-on:click="addFactionToCampaign">Add faction to campaign</button>
+      </div>
+
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
