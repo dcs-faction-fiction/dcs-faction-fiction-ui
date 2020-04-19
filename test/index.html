@@ -43,7 +43,9 @@
         </div>
 
         <div>
-          <input :value="newBasketName"/> <input :value="newBasketAmount"/>
+          <select v-model="newBasketName">
+            <option v-for="s in newBasketPossibleTypes">{{s}}</option>
+          </select> <input :value="newBasketAmount"/>
           <button v-on:click="addToBasket">+</button><br/>
           Basket({{ estimate }}): {{ basket }} <button v-on:click="emptybBasket">X</button>
           <br/>
