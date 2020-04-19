@@ -14,6 +14,8 @@ var app = new Vue({
     selectedCampaign: '',
     selectedFaction: '',
     selectedCampaignFaction: '',
+    credits: 0,
+    warehouse: [],
     units: [],
     map: {
       zoom: 7,
@@ -74,7 +76,17 @@ var app = new Vue({
         this.campaignFactions = data
         this.selectedCampaignFaction = this.selectedCampaignFaction ? this.selectedCampaignFaction : data[0].faction
 
+        this.fetchWarehouse()
         this.fetchUnits()
+        this.fetchCredits()
+      })
+    },
+    fetchCredits: function() {
+      if (!this.selectedCampaign || !this.selectedFaction) {
+        return;
+      }
+      this.getRequest('/factionmanager-api/factions/'+this.selectedFaction+'/campaigns/'+this.selectedCampaign+'/credits', data => {
+        this.credits = data
       })
     },
     fetchUnits: function() {
@@ -83,8 +95,14 @@ var app = new Vue({
       }
       this.getRequest('/factionmanager-api/factions/'+this.selectedFaction+'/campaigns/'+this.selectedCampaign+'/units', data => {
         this.units = data
-        console.log(data)
       });
+    },
+    fetchWarehouse: function() {
+      this.getRequest('/factionmanager-api/factions/'+this.selectedFaction+'/campaigns/'+this.selectedCampaign+'/warehouse', data => {
+        var wh = {}
+        data.items.forEach(i => wh[i.name] = i.amount)
+        this.warehouse = wh
+      })
     },
     addCampaign: function() {
       var name = prompt("New campaign name")

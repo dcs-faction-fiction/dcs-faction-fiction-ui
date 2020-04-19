@@ -1,52 +1,61 @@
 <html>
   <head>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://unpkg.com/vuelayers/lib/style.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v5.3.0/build/ol.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/vuelayers/lib/style.css">
     <script src="https://unpkg.com/vuelayers/lib/index.umd.js"></script>
   </head>
   <body>
 
     <div id="root">
-      <div>Token: <input v-model="token"/></div>
-      <div>
-        Campaings:
-        <select v-model="selectedCampaign">
-          <option v-for="s in campaigns">{{s}}</option>
-        </select>
-        <button v-on:click="addCampaign">+</button>
-      </div>
-      
-      <div>
-        Factions:
-        <select v-model="selectedFaction">
-          <option v-for="s in factions">{{s}}</option>
-        </select>
-        <button v-on:click="addFaction">+</button>
+      <div class="box">
+        <div>Token: <input v-model="token"/></div>
+        <div>
+          Campaings:
+          <select v-model="selectedCampaign">
+            <option v-for="s in campaigns">{{s}}</option>
+          </select>
+          <button v-on:click="addCampaign">+</button>
+        </div>
+        
+        <div>
+          Factions:
+          <select v-model="selectedFaction">
+            <option v-for="s in factions">{{s}}</option>
+          </select>
+          <button v-on:click="addFaction">+</button>
+        </div>
+
+        <div>
+          Airbases:
+          <select v-model="selectedAirbase">
+            <option v-for="s in airbases">{{s}}</option>
+          </select>
+        </div>
+
+        <div>
+          Campaign factions:
+          <select v-model="selectedCampaignFaction">
+            <option v-for="s in campaignFactions" v-bind:value="s.faction">{{s.airbase}} ({{s.faction}})</option>
+          </select>
+          <button v-on:click="addFactionToCampaign">Add faction to campaign</button>
+        </div>
+
+        <div>
+          Warehouse: {{ warehouse }}
+        </div>
       </div>
 
-      <div>
-        Airbases:
-        <select v-model="selectedAirbase">
-          <option v-for="s in airbases">{{s}}</option>
-        </select>
-      </div>
-
-      <div>
-        Campaign factions:
-        <select v-model="selectedCampaignFaction">
-          <option v-for="s in campaignFactions" v-bind:value="s.faction">{{s.airbase}} ({{s.faction}})</option>
-        </select>
-        <button v-on:click="addFactionToCampaign">Add faction to campaign</button>
-      </div>
-
-      <vl-map style="height: 600px"
+      <vl-map class="box" style="height: 600px"
         data-projection="EPSG:4326"
         :load-tiles-while-animating="true"
         :load-tiles-while-interacting="true">
         <vl-view :zoom.sync="map.zoom" :center.sync="map.center" :rotation.sync="map.rotation"></vl-view>
         <vl-layer-tile id="osm"><vl-source-osm></vl-source-osm></vl-layer-tile>
+        <vl-feature v-for="i in units" v-bind:key="i.id" :properties="{name: i.type}">
+          <vl-geom-point :coordinates="[i.location.longitude, i.location.latitude]"></vl-geom-point>
+        </vl-feature>
       </vl-map>
 
     </div>
