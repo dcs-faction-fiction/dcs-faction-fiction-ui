@@ -11,7 +11,8 @@ var app = new Vue({
     campaignFactions: [],
     selectedCampaign: '',
     selectedFaction: '',
-    selectedCampaignFaction: ''
+    selectedCampaignFaction: '',
+    units: []
   },
   methods: {
     getRequest: function(url, consumer) {
@@ -40,21 +41,43 @@ var app = new Vue({
       .then(data => consumer.call(t, data))
       .catch(err => console.log(err))
     },
-    fetchPicklists: function() {
+    fetchAll: function() {
+      this.fetchFactions()
+      this.fetchCampaigns()
+    },
+    fetchFactions: function() {
       this.getRequest('/factionmanager-api/factions', data => {
         this.factions = data
         this.selectedFaction = this.selectedFaction ? this.selectedFaction : data[0]
       })
+    },
+    fetchCampaigns: function() {
       this.getRequest('/campaignmanager-api/campaigns', data => {
         this.campaigns = data
         this.selectedCampaign = this.selectedCampaign ? this.selectedCampaign : data[0]
-        if (this.selectedCampaign) {
-          this.getRequest('/campaignmanager-api/campaigns/'+this.selectedCampaign+'/factions', data => {
-            this.campaignFactions = data
-            this.selectedCampaignFaction = this.selectedCampaignFaction ? this.selectedCampaignFaction : data[0].faction
-          })
-        }
+        
+        this.fetchCampaignFactions()
       })
+    },
+    fetchCampaignFactions: function() {
+      if (!this.selectedCampaign) {
+        return;
+      }
+      this.getRequest('/campaignmanager-api/campaigns/'+this.selectedCampaign+'/factions', data => {
+        this.campaignFactions = data
+        this.selectedCampaignFaction = this.selectedCampaignFaction ? this.selectedCampaignFaction : data[0].faction
+
+        this.fetchUnits()
+      })
+    },
+    fetchUnits: function() {
+      if (!this.selectedCampaign || !this.selectedFaction) {
+        return;
+      }
+      this.getRequest('/factionmanager-api/factions/'+this.selectedFaction+'/campaigns/'+this.selectedCampaign+'/units', data => {
+        this.units = data
+        console.log(data)
+      });
     },
     addCampaign: function() {
       var name = prompt("New campaign name")
@@ -81,14 +104,13 @@ var app = new Vue({
   mounted() {
     if (localStorage.token) {
       this.token = localStorage.token
-      this.fetchPicklists()
+      this.fetchAll()
     }
   },
   watch: {
     token(newToken) {
       localStorage.token = newToken
-      this.fetchPicklists()
+      this.fetchAll()
     }
   }
 });
-
