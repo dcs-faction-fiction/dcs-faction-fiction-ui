@@ -45,7 +45,7 @@
         <div>
           <select v-model="newBasketName">
             <option v-for="s in newBasketPossibleTypes">{{s}}</option>
-          </select> <input :value="newBasketAmount"/>
+          </select> <input v-model="newBasketAmount"/>
           <button v-on:click="addToBasket">+</button><br/>
           Basket({{ estimate }}): {{ basket }} <button v-on:click="emptybBasket">X</button>
           <br/>
@@ -54,6 +54,14 @@
           <br/>
           Credits: {{ credits }}<br/>
           Warehouse: {{ warehouse }}<br/>
+          <br/>
+          <select v-model="newUnit.type">
+            <option v-for="s in newBasketPossibleTypesUnits">{{s}}</option>
+          </select>
+          <input v-model="newUnit.lat"/>
+          <input v-model="newUnit.lon"/>
+          <button v-on:click="buyUnit">+</button><br/>
+          <br/>
           Units: {{ units }}
         </div>
       </div>

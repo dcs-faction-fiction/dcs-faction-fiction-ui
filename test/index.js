@@ -17,8 +17,60 @@ var app = new Vue({
     credits: 0,
     estimate: 0,
     warehouse: {},
+    newUnit: {
+      type: '',
+      lat: 0,
+      lon: 0
+    },
+    newBasketPossibleTypesUnits: [
+      "BRADLEY",
+      "ABRAMS"
+    ],
     newBasketPossibleTypes: [
-      "JET_FUEL_TONS","AVIATION_GASOLINE_TONS","MW50_TONS","DIESEL_TONS","F_14_B","F_15_C","F_16_C","F_A_18_C","SU_27","SU_33","MIG_29_S","UH_1H","KA_50","AIM_120_B","AIM_120_C","AIM_54_A_MK_47","AIM_54_A_MK_60","AIM_54_C_MK_47","AIM_7_F","AIM_7_M","AIM_7_MH","AIM_9_L","AIM_9_M","AIM_9_P5","AIM_9_X","R_27_ER","R_27_ET","R_27_R","R_27_T","R_73","R_60","R_77","AGM_122","AGM_154_A","AGM_154_C","AGM_65_D","AGM_65_E","AGM_65_F","AGM_65_G","AGM_65_H","AGM_65_K","AGM_84_D","AGM_88_C","VIKHR"
+      "JET_FUEL_TONS",
+      "AVIATION_GASOLINE_TONS",
+      "MW50_TONS",
+      "DIESEL_TONS",
+      "F_14_B",
+      "F_15_C",
+      "F_16_C",
+      "F_A_18_C",
+      "SU_27",
+      "SU_33",
+      "MIG_29_S",
+      "UH_1H",
+      "KA_50",
+      "AIM_120_B",
+      "AIM_120_C",
+      "AIM_54_A_MK_47",
+      "AIM_54_A_MK_60",
+      "AIM_54_C_MK_47",
+      "AIM_7_F",
+      "AIM_7_M",
+      "AIM_7_MH",
+      "AIM_9_L",
+      "AIM_9_M",
+      "AIM_9_P5",
+      "AIM_9_X",
+      "R_27_ER",
+      "R_27_ET",
+      "R_27_R",
+      "R_27_T",
+      "R_73",
+      "R_60",
+      "R_77",
+      "AGM_122",
+      "AGM_154_A",
+      "AGM_154_C",
+      "AGM_65_D",
+      "AGM_65_E",
+      "AGM_65_F",
+      "AGM_65_G",
+      "AGM_65_H",
+      "AGM_65_K",
+      "AGM_84_D",
+      "AGM_88_C",
+      "VIKHR"
     ],
     newBasketName: "JET_FUEL_TONS",
     newBasketAmount: 1,
@@ -159,7 +211,20 @@ var app = new Vue({
       }
       this.setRequest('post', '/factionmanager-api/factions/'+this.selectedFaction+'/campaigns/'+this.selectedCampaign+'/warehouse', req, data => {
         this.emptybBasket()
-        this.fetchAll()
+        this.fetchWarehouse()
+        this.fetchCredits()
+      })
+    },
+    buyUnit: function() {
+      var req = {}
+      req.type = this.newUnit.type
+      req.location = {}
+      req.location.latitude = this.newUnit.lat
+      req.location.longitude = this.newUnit.lon
+      req.location.altitude = 0
+      req.location.angle = 0
+      this.setRequest('post', '/factionmanager-api/factions/'+this.selectedFaction+'/campaigns/'+this.selectedCampaign+'/units', req, data => {
+        this.fetchUnits()
       })
     }
   },
