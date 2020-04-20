@@ -97,7 +97,7 @@
       </vl-interaction-select>
       
       <vl-layer-vector :z-index="1" id="layer-units">
-        <vl-source-vector :features.sync="mapUnits"></vl-source-vector>
+        <vl-source-vector ident="units-target" :features.sync="mapUnits"></vl-source-vector>
         <vl-style-box :z-index="1">
           <vl-style-circle :radius="8">
             <vl-style-fill color="white"></vl-style-fill>
@@ -110,6 +110,8 @@
           <!--<vl-style-text :text="unitType"></vl-style-text>-->
         </vl-style-box>
       </vl-layer-vector>
+      <vl-interaction-snap source="units-target" :priority="10"></vl-interaction-snap>
+      <vl-interaction-modify source="units-target"></vl-interaction-modify>
 
       <vl-layer-vector id="draw-pane">
         <vl-source-vector ident="draw-target" :features.sync="drawnFeatures"></vl-source-vector>
