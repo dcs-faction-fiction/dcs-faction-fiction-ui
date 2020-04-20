@@ -80,7 +80,10 @@ var app = new Vue({
       zoom: 7,
       center: [41, 43],
       rotation: 0
-    }
+    },
+    mapUnits: [],
+    mapSelection: [],
+    drawnFeatures: []
   },
   methods: {
     getRequest: function(url, consumer) {
@@ -154,7 +157,22 @@ var app = new Vue({
       }
       this.getRequest('/factionmanager-api/factions/'+this.selectedFaction+'/campaigns/'+this.selectedCampaign+'/units', data => {
         this.units = data
+        this.updateMapUnits()
       });
+    },
+    updateMapUnits: function() {
+      this.mapUnits = this.units.map(i => {
+        return {
+          id: i.id,
+          unitType: i.type,
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [i.location.longitude,i.location.latitude],
+          },
+          properties: {},
+        }
+      })
     },
     fetchWarehouse: function() {
       this.getRequest('/factionmanager-api/factions/'+this.selectedFaction+'/campaigns/'+this.selectedCampaign+'/warehouse', data => {
@@ -189,15 +207,17 @@ var app = new Vue({
       this.estimate = 0
     },
     addToBasket: function() {
-      var count = this.basket[this.newBasketName]
+      var basket = this.basket
+      var count = basket[this.newBasketName]
       count = count ? count : 0
-      count = count + this.newBasketAmount
-      this.basket[this.newBasketName] = count
-      this.calculateBasket()
+      count = count + parseInt(this.newBasketAmount)
+      basket[this.newBasketName] = count
+      this.basket = basket
+      this.calculateBasket(this.basket)
     },
-    calculateBasket: function() {
+    calculateBasket: function(basket) {
       var req = {items: []}
-      for (const prop in this.basket) {
+      for (const prop in basket) {
         req.items.push({name: prop, amount: this.basket[prop]})
       }
       this.setRequest('post', '/common-api/warehouseestimate', req, data => {

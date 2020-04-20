@@ -1,84 +1,131 @@
 <html>
-  <head>
-    <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="https://unpkg.com/vuelayers/lib/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v5.3.0/build/ol.js"></script>
-    <script src="https://unpkg.com/vuelayers/lib/index.umd.js"></script>
-  </head>
-  <body>
 
-    <div id="root">
-      <div class="box">
-        <div>Token: <input v-model="token"/></div>
-        <div>
-          Campaings:
-          <select v-model="selectedCampaign">
-            <option v-for="s in campaigns">{{s}}</option>
-          </select>
-          <button v-on:click="addCampaign">+</button>
-        </div>
-        
-        <div>
-          Factions:
-          <select v-model="selectedFaction">
-            <option v-for="s in factions">{{s}}</option>
-          </select>
-          <button v-on:click="addFaction">+</button>
-        </div>
+<head>
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://unpkg.com/vuelayers/lib/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v5.3.0/build/ol.js"></script>
+  <script src="https://unpkg.com/vuelayers/lib/index.umd.js"></script>
+</head>
 
-        <div>
-          Airbases:
-          <select v-model="selectedAirbase">
-            <option v-for="s in airbases">{{s}}</option>
-          </select>
-        </div>
+<body>
 
-        <div>
-          Campaign factions:
-          <select v-model="selectedCampaignFaction">
-            <option v-for="s in campaignFactions" v-bind:value="s.faction">{{s.airbase}} ({{s.faction}})</option>
-          </select>
-          <button v-on:click="addFactionToCampaign">Add faction to campaign</button>
-        </div>
-
-        <div>
-          <select v-model="newBasketName">
-            <option v-for="s in newBasketPossibleTypes">{{s}}</option>
-          </select> <input v-model="newBasketAmount"/>
-          <button v-on:click="addToBasket">+</button><br/>
-          Basket({{ estimate }}): {{ basket }} <button v-on:click="emptybBasket">X</button>
-          <br/>
-          <button v-on:click="buyBasket">&gt; BUY &lt;</button>
-          <br/>
-          <br/>
-          Credits: {{ credits }}<br/>
-          Warehouse: {{ warehouse }}<br/>
-          <br/>
-          <select v-model="newUnit.type">
-            <option v-for="s in newBasketPossibleTypesUnits">{{s}}</option>
-          </select>
-          <input v-model="newUnit.lat"/>
-          <input v-model="newUnit.lon"/>
-          <button v-on:click="buyUnit">+</button><br/>
-          <br/>
-          Units: {{ units }}
-        </div>
+  <div id="root">
+    <div class="box">
+      <div>Token: <input v-model="token" /></div>
+      <div>
+        Campaings:
+        <select v-model="selectedCampaign">
+          <option v-for="s in campaigns" :key="s">{{s}}</option>
+        </select>
+        <button v-on:click="addCampaign">+</button>
       </div>
 
-      <vl-map class="box" style="height: 600px"
-        data-projection="EPSG:4326"
-        :load-tiles-while-animating="true"
-        :load-tiles-while-interacting="true">
-        <vl-view :zoom.sync="map.zoom" :center.sync="map.center" :rotation.sync="map.rotation"></vl-view>
-        <vl-layer-tile id="osm"><vl-source-osm></vl-source-osm></vl-layer-tile>
-        <vl-feature v-for="i in units" v-bind:key="i.id" :properties="{name: i.type}">
-          <vl-geom-point :coordinates="[i.location.longitude, i.location.latitude]"></vl-geom-point>
-        </vl-feature>
-      </vl-map>
+      <div>
+        Factions:
+        <select v-model="selectedFaction">
+          <option v-for="s in factions" :key="s">{{s}}</option>
+        </select>
+        <button v-on:click="addFaction">+</button>
+      </div>
 
+      <div>
+        Airbases:
+        <select v-model="selectedAirbase">
+          <option v-for="s in airbases" :key="s">{{s}}</option>
+        </select>
+      </div>
+
+      <div>
+        Campaign factions:
+        <select v-model="selectedCampaignFaction">
+          <option v-for="s in campaignFactions" :key="s.faction" v-bind:value="s.faction">{{s.airbase}} ({{s.faction}})
+          </option>
+        </select>
+        <button v-on:click="addFactionToCampaign">Add faction to campaign</button>
+      </div>
+
+      <div>
+        <select v-model="newBasketName">
+          <option v-for="s in newBasketPossibleTypes" :key="s">{{s}}</option>
+        </select> <input v-model="newBasketAmount" />
+        <button v-on:click="addToBasket">+</button><br />
+        Basket({{ estimate }}): {{ basket }} <button v-on:click="emptybBasket">X</button>
+        <br />
+        <button v-on:click="buyBasket">&gt; BUY &lt;</button>
+        <br />
+        <br />
+        Credits: {{ credits }}<br />
+        Warehouse: {{ warehouse }}<br />
+        <br />
+        <select v-model="newUnit.type">
+          <option v-for="s in newBasketPossibleTypesUnits" :key="s">{{s}}</option>
+        </select>
+        <input v-model="newUnit.lat" />
+        <input v-model="newUnit.lon" />
+        <button v-on:click="buyUnit">+</button><br />
+        <br />
+        Units: {{ units }}<br />
+        <br />
+        MapUnits: {{ mapUnits }}
+
+      </div>
     </div>
-    <script src="index.js"></script>
 
-  </body>
+    <vl-map class="box" style="height: 600px" data-projection="EPSG:4326" :load-tiles-while-animating="true"
+      :load-tiles-while-interacting="true">
+      <vl-view :zoom.sync="map.zoom" :center.sync="map.center" :rotation.sync="map.rotation"></vl-view>
+
+      <vl-interaction-select :features.sync="mapSelection">
+        <template slot-scope="select">
+          <!-- select styles -->
+          <vl-style-box>
+            <vl-style-stroke color="#423e9e" :width="7"></vl-style-stroke>
+            <vl-style-fill :color="[254, 178, 76, 0.7]"></vl-style-fill>
+            <vl-style-circle :radius="5">
+              <vl-style-stroke color="#423e9e" :width="7"></vl-style-stroke>
+              <vl-style-fill :color="[254, 178, 76, 0.7]"></vl-style-fill>
+            </vl-style-circle>
+          </vl-style-box>
+          <vl-style-box :z-index="1">
+            <vl-style-stroke color="#d43f45" :width="2"></vl-style-stroke>
+            <vl-style-circle :radius="5">
+              <vl-style-stroke color="#d43f45" :width="2"></vl-style-stroke>
+            </vl-style-circle>
+          </vl-style-box>
+        </template>
+      </vl-interaction-select>
+      
+      <vl-layer-vector :z-index="1" id="layer-units">
+        <vl-source-vector :features.sync="mapUnits"></vl-source-vector>
+        <vl-style-box :z-index="1">
+          <vl-style-circle :radius="8">
+            <vl-style-fill color="white"></vl-style-fill>
+            <vl-style-stroke color="green"></vl-style-stroke>
+          </vl-style-circle>
+        </vl-style-box>
+        <vl-style-box :z-index="2">
+          <vl-style-stroke color="blue"></vl-style-stroke>
+          <vl-style-fill color="rgba(255,255,255,0.5)"></vl-style-fill>
+          <!--<vl-style-text :text="unitType"></vl-style-text>-->
+        </vl-style-box>
+      </vl-layer-vector>
+
+      <vl-layer-vector id="draw-pane">
+        <vl-source-vector ident="draw-target" :features.sync="drawnFeatures"></vl-source-vector>
+      </vl-layer-vector>
+      <vl-interaction-draw source="draw-target" type="Point"></vl-interaction-draw>
+      <vl-interaction-modify source="draw-target"></vl-interaction-modify>
+      <vl-interaction-snap source="draw-target" :priority="10"></vl-interaction-snap>
+
+      <vl-layer-tile :z-index="0">
+        <vl-source-osm></vl-source-osm>
+      </vl-layer-tile>
+    </vl-map>
+
+  </div>
+  <script src="index.js"></script>
+
+</body>
+
 </html>
