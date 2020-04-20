@@ -1,0 +1,44 @@
+<html>
+
+<head>
+  <style>
+
+
+
+  </style>
+</head>
+
+<body>
+  <script>
+
+const apiNewToken = "/common-api/newjwt"
+const queryParams = new URLSearchParams(window.location.search);
+const jwt = queryParams.get('jwt');
+
+if (jwt) {
+  // This was coming from a link clicked sent via email.
+  // Save the token in the localStorage, forward to the faction & campaign selection page.
+  localStorage.token = jwt
+  // Use location replace so that this URL is not kept in history
+  // since it contains the jwt in the url.
+  window.location.replace("select-faction.html");
+} else {
+  // Ask for the user email
+  var email = prompt("Enter your email for login");
+  // Send the request for a new token to the api
+  fetch(apiNewToken, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({email: email})
+  })
+  .then(res => res.json())
+  .then(data => alert("Login initiated, check your email for a login link."))
+  .catch(err => console.log(err))
+}
+
+  </script>
+</body>
+
+</html>

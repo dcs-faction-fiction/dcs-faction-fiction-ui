@@ -78,19 +78,11 @@
 
       <vl-interaction-select :features.sync="mapSelection">
         <template slot-scope="select">
-          <!-- select styles -->
-          <vl-style-box>
-            <vl-style-stroke color="#423e9e" :width="7"></vl-style-stroke>
-            <vl-style-fill :color="[254, 178, 76, 0.7]"></vl-style-fill>
-            <vl-style-circle :radius="5">
-              <vl-style-stroke color="#423e9e" :width="7"></vl-style-stroke>
-              <vl-style-fill :color="[254, 178, 76, 0.7]"></vl-style-fill>
-            </vl-style-circle>
-          </vl-style-box>
           <vl-style-box :z-index="1">
-            <vl-style-stroke color="#d43f45" :width="2"></vl-style-stroke>
+            <vl-style-stroke color="black" :width="3"></vl-style-stroke>
             <vl-style-circle :radius="5">
-              <vl-style-stroke color="#d43f45" :width="2"></vl-style-stroke>
+              <vl-style-fill color="white"></vl-style-fill>
+              <vl-style-stroke color="black"></vl-style-stroke>
             </vl-style-circle>
           </vl-style-box>
         </template>
@@ -99,7 +91,8 @@
       <vl-layer-vector :z-index="1" id="layer-units">
         <vl-source-vector ident="units-target" :features.sync="mapUnits"></vl-source-vector>
         <vl-style-box :z-index="1">
-          <vl-style-circle :radius="8">
+          <vl-style-stroke color="green" :width="3"></vl-style-stroke>
+          <vl-style-circle :radius="5">
             <vl-style-fill color="white"></vl-style-fill>
             <vl-style-stroke color="green"></vl-style-stroke>
           </vl-style-circle>
@@ -113,8 +106,15 @@
       <vl-interaction-snap source="units-target" :priority="10"></vl-interaction-snap>
       <vl-interaction-modify source="units-target"></vl-interaction-modify>
 
-      <vl-layer-vector id="draw-pane">
+      <vl-layer-vector :z-index="1" id="draw-pane">
         <vl-source-vector ident="draw-target" :features.sync="drawnFeatures"></vl-source-vector>
+        <vl-style-box :z-index="1">
+          <vl-style-stroke color="yellow" :width="3"></vl-style-stroke>
+          <vl-style-circle :radius="5">
+            <vl-style-fill color="white"></vl-style-fill>
+            <vl-style-stroke color="yellow"></vl-style-stroke>
+          </vl-style-circle>
+        </vl-style-box>
       </vl-layer-vector>
       <vl-interaction-draw source="draw-target" type="Point"></vl-interaction-draw>
       <vl-interaction-modify source="draw-target"></vl-interaction-modify>
