@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <select id="factions"></select><button onclick="go()">GO</button>
+  <select id="campaigns"></select><button onclick="go()">GO</button>
   <script src="const.js"></script>
   <script>
 
@@ -17,7 +17,9 @@ if (! localStorage.token) {
   // Go back, no token
   window.location.replace("index.html");
 } else if (! localStorage.faction) {
-  fetch(API_URL+'/factionmanager-api/factions', {
+  window.location.replace("select-faction.html");
+} else if (! localStorage.campaign) {
+  fetch(API_URL+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer '+localStorage.token
@@ -25,19 +27,19 @@ if (! localStorage.token) {
   })
   .then(res => res.json())
   .then(data => {
-    var select = document.getElementById('factions')
+    var select = document.getElementById('campaigns')
     data.forEach(f => select.options[select.options.length] = new Option(f))
   })
   .catch(err => console.log(err))
 } else {
-  window.location.replace("select-campaign.html");
+  window.location.replace("final.html");
 }
 
 function go() {
-  var select = document.getElementById('factions')
+  var select = document.getElementById('campaigns')
   var value = select.options[select.selectedIndex].value
-  localStorage.faction = value
-  window.location.replace("select-campaign.html");
+  localStorage.campaign = value
+  window.location.replace("final.html");
 }
 
   </script>
