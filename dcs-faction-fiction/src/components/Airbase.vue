@@ -10,7 +10,7 @@
       :apiUrl="apiUrl"
       :faction="faction"
       :campaign="campaign"
-      :airbase="airbase"/>
+      :airbase="airbase.airbase"/>
   </div>
 </template>
 
