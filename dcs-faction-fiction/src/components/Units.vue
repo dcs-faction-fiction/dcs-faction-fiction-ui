@@ -20,16 +20,16 @@ export default {
   },
   data() {
     return {
-      localUnits: this.units,
-      unsavedUnits: this.units
+      localUnits: this.units
     }
   },
   methods: {
-    saveUnits() {
+    async saveUnits(unitsToSave) {
       var toAdd = []
       var toPlace = []
-      this.localUnits.forEach(u => {
-        var unit = this.unsavedUnits[u.id]
+      for (var prop in unitsToSave) {
+        var u = unitsToSave[prop]
+        var unit = this.localUnits[prop]
         if (unit && (
           ""+u.location.latitude != ""+unit.location.latitude ||
           ""+u.location.longitude != ""+unit.location.longitude )) {
@@ -37,17 +37,18 @@ export default {
         } else if (!unit) {
           toAdd.push(u)
         }
-      })
-      var all = []
-      all.push(this.addUnits(toAdd))
-      all.push(this.placeUnits(toPlace))
+      }
+      await this.addUnits(toAdd)
+      await this.placeUnits(toPlace)
       if (toAdd.length > 0 || toPlace.length > 0) {
-        Promise.all(all).then(() => this.getUnits())
+        await this.getUnits()
       }
     },
-    placeUnits(units) {
-      if (units.length > 0) {
-        return units.map(u => fetch(this.apiUrl+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns/'+localStorage.campaign+'/units/'+u.id, {
+    async placeUnits(units) {
+      var i;
+      for (i = 0; i < units.length; i++) {
+        var u = units[i]
+        await fetch(this.apiUrl+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns/'+localStorage.campaign+'/units/'+u.id, {
           method: 'PUT',
           headers: {
             'Authorization': 'Bearer' + localStorage.token,
@@ -55,13 +56,13 @@ export default {
           },
           body: JSON.stringify(u.location)
         })
-        .then(r => r.body())
-        .catch(err => console.log(err)))
       }
     },
-    addUnits(units) {
-      if (units.length > 0) {
-        return units.map(u => fetch(this.apiUrl+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns/'+localStorage.campaign+'/units', {
+    async addUnits(units) {
+      var i;
+      for (i = 0; i < units.length; i++) {
+        var u = units[i]
+        await fetch(this.apiUrl+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns/'+localStorage.campaign+'/units', {
           method: 'POST',
           headers: {
             'Authorization': 'Bearer' + localStorage.token,
@@ -69,8 +70,6 @@ export default {
           },
           body: JSON.stringify({type: u.type, location: u.location})
         })
-        .then(r => r.body())
-        .catch(err => console.log(err)))
       }
     },
     getUnits() {
@@ -84,15 +83,13 @@ export default {
         },
       })
       .then(resp => resp.json())
-      .then(data => this.updateUnits(data))
+      .then(data => {
+        var result = {}
+        data.forEach(u => result[u.id] = u)
+        this.localUnits = result
+        this.$emit('update:units', this.localUnits)
+      })
       .catch(err => console.log(err))
-    },
-    updateUnits(units) {
-      this.localUnits = units
-      var result = {}
-      units.forEach(u => result[u.id] = u)
-      this.unsavedUnits = result
-      this.$emit('update:units', units)
     }
   },
   watch: {
@@ -103,8 +100,7 @@ export default {
       this.getUnits()
     },
     units(val) {
-      this.localUnits = val
-      this.saveUnits()
+      this.saveUnits(val)
     }
   },
   created() {

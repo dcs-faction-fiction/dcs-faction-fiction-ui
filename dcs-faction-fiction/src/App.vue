@@ -9,6 +9,10 @@
         :apiUrl="apiUrl"
         :faction="faction"
         :selection.sync="campaign"/>
+      <credits
+        :apiUrl="apiUrl"
+        :faction="faction"
+        :campaign="campaign"/>
       <units
         :apiUrl="apiUrl"
         :faction="faction"
@@ -19,6 +23,10 @@
         :campaign="campaign"
         :faction="faction"
         :airbase.sync="airbase"/>
+      <basket
+        :apiUrl="apiUrl"
+        :campaign="campaign"
+        :faction="faction"/>
       <command-map
         :apiUrl="apiUrl"
         :campaign="campaign"
@@ -35,6 +43,8 @@ import ContextSelector from './components/ContextSelector.vue'
 import Airbase from './components/Airbase.vue'
 import Units from './components/Units.vue'
 import CommandMap from './components/CommandMap.vue'
+import Basket from './components/Basket.vue'
+import Credits from './components/Credits.vue'
 
 export default {
   name: 'App',
@@ -53,7 +63,9 @@ export default {
     ContextSelector,
     Airbase,
     Units,
-    CommandMap
+    CommandMap,
+    Basket,
+    Credits
   },
   methods: {
 
@@ -69,7 +81,6 @@ export default {
       localStorage.airbase = val
     },
     units() {
-      console.log('units updated')
     }
   }
 }

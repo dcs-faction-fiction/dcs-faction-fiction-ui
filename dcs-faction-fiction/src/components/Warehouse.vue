@@ -35,11 +35,8 @@ export default {
         },
       })
       .then(resp => resp.json())
-      .then(data => this.updateWarehouse(data))
+      .then(data => this.warehouse = data)
       .catch(err => console.log(err))
-    },
-    updateWarehouse(warehouse) {
-      this.warehouse = warehouse
     }
   },
   watch: {
@@ -55,9 +52,11 @@ export default {
   },
   created() {
     this.$eventHub.$on('logged-in', this.getWarehouse);
+    this.$eventHub.$on('warehouse-update', this.getWarehouse);
   },
   beforeDestroy() {
     this.$eventHub.$off('logged-in');
+    this.$eventHub.$off('warehouse-update');
   }
 }
 </script>

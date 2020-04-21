@@ -87,18 +87,18 @@ export default {
   },
   methods: {
     applyUnitsPosition() {
-      this.$emit('update:units', this.mapUnits.map(u => {
-        return {
-          id: u.id,
-          type: u.unitType,
-          location: {
-            latitude: u.geometry.coordinates[1],
-            longitude: u.geometry.coordinates[0],
-            altitude: 0,
-            angle: 0
-          }
+      var result = {}
+      this.mapUnits.forEach(u => result[u.id] = {
+        id: u.id,
+        type: u.unitType,
+        location: {
+          latitude: u.geometry.coordinates[1],
+          longitude: u.geometry.coordinates[0],
+          altitude: 0,
+          angle: 0
         }
-      }))
+      })
+      this.$emit('update:units', result)
     }
   },
   watch: {
@@ -108,18 +108,21 @@ export default {
       }
     },
     units(val) {
-      this.mapUnits = val.map(i => {
-        return {
-          id: i.id,
-          unitType: i.type,
+      var result = []
+      for (var prop in val) {
+        var u = val[prop]
+        result.push({
+          id: u.id,
+          unitType: u.type,
           type: 'Feature',
           geometry: {
             type: 'Point',
-            coordinates: [i.location.longitude,i.location.latitude],
+            coordinates: [u.location.longitude, u.location.latitude],
           },
           properties: {},
-        }
-      })
+        })
+      }
+      this.mapUnits = result
     }
   }
 }
