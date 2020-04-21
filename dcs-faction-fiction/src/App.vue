@@ -18,6 +18,11 @@
         :campaign="campaign"
         :faction="faction"
         :airbase.sync="airbase"/>
+      <command-map
+        :apiUrl="apiUrl"
+        :campaign="campaign"
+        :faction="faction"
+        :airbase.sync="airbase"/>
     </div>
   </div>
 </template>
@@ -27,6 +32,7 @@ import JWTProvider from './components/JWTProvider.vue'
 import ContextSelector from './components/ContextSelector.vue'
 import Airbase from './components/Airbase.vue'
 import Units from './components/Units.vue'
+import CommandMap from './components/CommandMap.vue'
 
 export default {
   name: 'App',
@@ -43,7 +49,8 @@ export default {
     JWTProvider,
     ContextSelector,
     Airbase,
-    Units
+    Units,
+    CommandMap
   },
   methods: {
 
