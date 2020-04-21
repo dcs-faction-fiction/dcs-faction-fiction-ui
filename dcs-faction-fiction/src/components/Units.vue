@@ -38,15 +38,16 @@ export default {
           toAdd.push(u)
         }
       })
-      if (toAdd.length > 0) {
-        this.addUnits(toAdd)
-      }
-      if (toPlace.length > 0) {
-        this.placeUnits(toPlace)
+      var all = []
+      all.push(this.addUnits(toAdd))
+      all.push(this.placeUnits(toPlace))
+      if (toAdd.length > 0 || toPlace.length > 0) {
+        Promise.all(all).then(() => this.getUnits())
       }
     },
     placeUnits(units) {
-      units.forEach(u => fetch(this.apiUrl+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns/'+localStorage.campaign+'/units/'+u.id, {
+      if (units.length > 0) {
+        return units.map(u => fetch(this.apiUrl+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns/'+localStorage.campaign+'/units/'+u.id, {
           method: 'PUT',
           headers: {
             'Authorization': 'Bearer' + localStorage.token,
@@ -54,12 +55,13 @@ export default {
           },
           body: JSON.stringify(u.location)
         })
-        .then(() => this.getUnits())
-        .catch(err => console.log(err))
-      )
+        .then(r => r.body())
+        .catch(err => console.log(err)))
+      }
     },
     addUnits(units) {
-      units.forEach(u => fetch(this.apiUrl+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns/'+localStorage.campaign+'/units', {
+      if (units.length > 0) {
+        return units.map(u => fetch(this.apiUrl+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns/'+localStorage.campaign+'/units', {
           method: 'POST',
           headers: {
             'Authorization': 'Bearer' + localStorage.token,
@@ -67,10 +69,9 @@ export default {
           },
           body: JSON.stringify({type: u.type, location: u.location})
         })
-        .then(() => this.getUnits())
-        .catch(err => console.log(err))
-      )
-      console.log('placing units: ' + units)
+        .then(r => r.body())
+        .catch(err => console.log(err)))
+      }
     },
     getUnits() {
       if (!this.campaign || !this.faction) {

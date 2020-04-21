@@ -108,22 +108,18 @@ export default {
       }
     },
     units(val) {
-      if (!this.updateMutex) {
-        this.updateMutex = true
-        this.mapUnits = val.map(i => {
-          return {
-            id: i.id,
-            unitType: i.type,
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [i.location.longitude,i.location.latitude],
-            },
-            properties: {},
-          }
-        })
-        this.updateMutex = false
-      }
+      this.mapUnits = val.map(i => {
+        return {
+          id: i.id,
+          unitType: i.type,
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [i.location.longitude,i.location.latitude],
+          },
+          properties: {},
+        }
+      })
     }
   }
 }
