@@ -1,0 +1,14 @@
+<html>
+<head>
+  <script>
+    const queryParams = new URLSearchParams(window.location.search);
+    // This was coming from a link clicked sent via email.
+    // Save the token in the localStorage, forward to the faction & campaign selection page.
+    localStorage.token = queryParams.get('jwt')
+    // Use location replace so that this URL is not kept in history
+    // since it contains the jwt in the url.
+    window.location.replace("index.html");
+  </script>
+</head>
+<body></body>
+</html>

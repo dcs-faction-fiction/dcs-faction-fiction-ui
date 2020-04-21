@@ -7,8 +7,18 @@
         :selection.sync="faction"/>
       <context-selector type="campaign"
         :apiUrl="apiUrl"
-        :selection.sync="campaign"
-        :faction.sync="faction"/>
+        :faction="faction"
+        :selection.sync="campaign"/>
+      <airbase
+        :apiUrl="apiUrl"
+        :campaign="campaign"
+        :faction="faction"
+        :airbase.sync="airbase"/>
+      <warehouse
+        :apiUrl="apiUrl"
+        :faction="faction"
+        :campaign="campaign"
+        :airbase="airbase"/>
     </div>
   </div>
 </template>
@@ -16,6 +26,8 @@
 <script>
 import JWTProvider from './components/JWTProvider.vue'
 import ContextSelector from './components/ContextSelector.vue'
+import Airbase from './components/Airbase.vue'
+import Warehouse from './components/Warehouse.vue'
 
 export default {
   name: 'App',
@@ -24,12 +36,15 @@ export default {
       apiUrl: 'http://localhost:8080',
       loggedIn: false,
       faction: localStorage.faction,
-      campaign: localStorage.campaign
+      campaign: localStorage.campaign,
+      airbase: localStorage.airbase,
     }
   },
   components: {
     JWTProvider,
-    ContextSelector
+    ContextSelector,
+    Airbase,
+    Warehouse
   },
   methods: {
 
@@ -40,6 +55,9 @@ export default {
     },
     campaign(val) {
       localStorage.campaign = val
+    },
+    airbase(val) {
+      localStorage.airbase = val
     }
   }
 }
