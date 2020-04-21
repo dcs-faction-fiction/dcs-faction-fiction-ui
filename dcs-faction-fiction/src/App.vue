@@ -9,16 +9,15 @@
         :apiUrl="apiUrl"
         :faction="faction"
         :selection.sync="campaign"/>
+      <units
+        :apiUrl="apiUrl"
+        :faction="faction"
+        :campaign="campaign"/>
       <airbase
         :apiUrl="apiUrl"
         :campaign="campaign"
         :faction="faction"
         :airbase.sync="airbase"/>
-      <warehouse
-        :apiUrl="apiUrl"
-        :faction="faction"
-        :campaign="campaign"
-        :airbase="airbase"/>
     </div>
   </div>
 </template>
@@ -27,7 +26,7 @@
 import JWTProvider from './components/JWTProvider.vue'
 import ContextSelector from './components/ContextSelector.vue'
 import Airbase from './components/Airbase.vue'
-import Warehouse from './components/Warehouse.vue'
+import Units from './components/Units.vue'
 
 export default {
   name: 'App',
@@ -44,7 +43,7 @@ export default {
     JWTProvider,
     ContextSelector,
     Airbase,
-    Warehouse
+    Units
   },
   methods: {
 

@@ -4,11 +4,23 @@
 -->
 
 <template>
-  <div>{{localAirbase.airbase}}</div>
+  <div>
+    {{localAirbase.airbase}}
+    <warehouse
+      :apiUrl="apiUrl"
+      :faction="faction"
+      :campaign="campaign"
+      :airbase="airbase"/>
+  </div>
 </template>
 
 <script>
+import Warehouse from './Warehouse.vue'
+
 export default {
+  components: {
+    Warehouse
+  },
   props: {
     apiUrl: {
       type: String,
