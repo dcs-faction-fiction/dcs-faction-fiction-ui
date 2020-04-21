@@ -5,14 +5,14 @@ Vue.use(VueLayers)
 var app = new Vue({ 
   el: '#root',
   data: {
-    token: '',
+    token: localStorage.token,
+    selectedCampaign: localStorage.campaign,
+    selectedFaction: localStorage.faction,
     airbases: ['KUTAISI', 'MAYKOP'],
     selectedAirbase: 'KUTAISI',
     campaigns: [],
     factions: [],
     campaignFactions: [],
-    selectedCampaign: '',
-    selectedFaction: '',
     selectedCampaignFaction: '',
     credits: 0,
     estimate: 0,
@@ -249,8 +249,7 @@ var app = new Vue({
     }
   },
   mounted() {
-    if (localStorage.token) {
-      this.token = localStorage.token
+    if (this.token) {
       this.fetchAll()
     }
   },

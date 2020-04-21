@@ -2,9 +2,10 @@
 
 <head>
   <style>
-
-
-
+    body {
+      background-image: url("background.jpg");
+      background-repeat: repeat;
+    }
   </style>
 </head>
 
@@ -13,33 +14,35 @@
   <script src="const.js"></script>
   <script>
 
-if (! localStorage.token) {
-  // Go back, no token
-  window.location.replace("index.html");
-} else if (! localStorage.faction) {
-  window.location.replace("select-faction.html");
-} else if (! localStorage.campaign) {
-  fetch(API_URL+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer '+localStorage.token
-    }
-  })
-  .then(res => res.json())
-  .then(data => {
-    var select = document.getElementById('campaigns')
-    data.forEach(f => select.options[select.options.length] = new Option(f))
-  })
-  .catch(err => console.log(err))
-} else {
-  window.location.replace("final.html");
-}
+window.addEventListener('load', e => {
+  if (! localStorage.token) {
+    // Go back, no token
+    window.location.replace("index.html");
+  } else if (! localStorage.faction) {
+    window.location.replace("select-faction.html");
+  } else if (! localStorage.campaign) {
+    fetch(API_URL+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer '+localStorage.token
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      var select = document.getElementById('campaigns')
+      data.forEach(f => select.options[select.options.length] = new Option(f))
+    })
+    .catch(err => console.log(err))
+  } else {
+    window.location.replace(FINALWEB_URL);
+  }
+});
 
 function go() {
   var select = document.getElementById('campaigns')
   var value = select.options[select.selectedIndex].value
   localStorage.campaign = value
-  window.location.replace("final.html");
+  window.location.replace(FINALWEB_URL);
 }
 
   </script>

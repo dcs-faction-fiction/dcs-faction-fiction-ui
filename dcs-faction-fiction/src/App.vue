@@ -1,17 +1,46 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <j-w-t-provider :loggedIn.sync="loggedIn"/>
+    <div v-show="loggedIn">
+      <context-selector type="faction"
+        :apiUrl="apiUrl"
+        :selection.sync="faction"/>
+      <context-selector type="campaign"
+        :apiUrl="apiUrl"
+        :selection.sync="campaign"
+        :faction.sync="faction"/>
+    </div>
   </div>
 </template>
 
 <script>
-import Map from './components/Map.vue'
+import JWTProvider from './components/JWTProvider.vue'
+import ContextSelector from './components/ContextSelector.vue'
 
 export default {
   name: 'App',
+  data() {
+    return {
+      apiUrl: 'http://localhost:8080',
+      loggedIn: false,
+      faction: localStorage.faction,
+      campaign: localStorage.campaign
+    }
+  },
   components: {
-    Map
+    JWTProvider,
+    ContextSelector
+  },
+  methods: {
+
+  },
+  watch: {
+    faction(val) {
+      localStorage.faction = val
+    },
+    campaign(val) {
+      localStorage.campaign = val
+    }
   }
 }
 </script>
