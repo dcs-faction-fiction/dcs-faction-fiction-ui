@@ -12,7 +12,8 @@
       <units
         :apiUrl="apiUrl"
         :faction="faction"
-        :campaign="campaign"/>
+        :campaign="campaign"
+        :units.sync="units"/>
       <airbase
         :apiUrl="apiUrl"
         :campaign="campaign"
@@ -22,7 +23,8 @@
         :apiUrl="apiUrl"
         :campaign="campaign"
         :faction="faction"
-        :airbase.sync="airbase"/>
+        :airbase.sync="airbase"
+        :units.sync="units"/>
     </div>
   </div>
 </template>
@@ -43,6 +45,7 @@ export default {
       faction: localStorage.faction,
       campaign: localStorage.campaign,
       airbase: localStorage.airbase,
+      units: {},
     }
   },
   components: {
@@ -64,6 +67,9 @@ export default {
     },
     airbase(val) {
       localStorage.airbase = val
+    },
+    units() {
+      console.log('units updated')
     }
   }
 }
