@@ -27,7 +27,11 @@
         :apiUrl="apiUrl"
         :campaign="campaign"
         :faction="faction"/>
-      <Map/>
+      <UnitMap
+        :apiUrl="apiUrl"
+        :campaign="campaign"
+        :faction="faction"
+        :airbase="airbase"/>
     </div>
   </div>
 </template>
@@ -39,7 +43,7 @@ import Airbase from './components/Airbase.vue'
 import Units from './components/Units.vue'
 import Basket from './components/Basket.vue'
 import Credits from './components/Credits.vue'
-import Map from './components/Map.vue'
+import UnitMap from './components/UnitMap.vue'
 
 export default {
   name: 'App',
@@ -60,7 +64,7 @@ export default {
     Units,
     Basket,
     Credits,
-    Map
+    UnitMap
   },
   methods: {
 
