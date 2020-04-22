@@ -6,6 +6,17 @@
 <script>
 
 import 'leaflet/dist/leaflet.css';
+var L = require('leaflet')
+var mapLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+  maxZoom: 16,
+  minZoom: 4,
+  useCache: true,
+});
+var wmsLayer = L.tileLayer.wms('http://ows.mundialis.de/services/service?', {
+  layers: 'TOPO-OSM-WMS',
+  opacity: 0.3
+});
 
 export default {
   props: {
@@ -37,14 +48,9 @@ export default {
   },
   mounted() {
     if (!this.map) {
-      var L = require('leaflet')
       this.map = L.map('map')
-      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 16,
-        minZoom: 4,
-        useCache: true
-      }).addTo(this.map);
+      mapLayer.addTo(this.map);
+      wmsLayer.addTo(this.map);
       setTimeout(() => this.map.invalidateSize(), 0)
     }
   },
