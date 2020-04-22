@@ -14,7 +14,7 @@ var mapLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
   useCache: true,
 });
 var wmsLayer = L.tileLayer.wms('http://ows.mundialis.de/services/service?', {
-  layers: 'TOPO-OSM-WMS',
+  layers: 'TOPO-WMS',
   opacity: 0.3
 });
 
