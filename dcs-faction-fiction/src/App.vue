@@ -31,7 +31,8 @@
         :apiUrl="apiUrl"
         :campaign="campaign"
         :faction="faction"
-        :airbase="airbase"/>
+        :airbase="airbase"
+        :units.sync="units"/>
     </div>
   </div>
 </template>
