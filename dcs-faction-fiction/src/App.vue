@@ -1,38 +1,33 @@
 <template>
   <div id="app">
-    <j-w-t-provider :loggedIn.sync="loggedIn"/>
+    <JWTProvider :loggedIn.sync="loggedIn"/>
     <div v-show="loggedIn">
-      <context-selector type="faction"
+      <ContextSelector type="faction"
         :apiUrl="apiUrl"
         :selection.sync="faction"/>
-      <context-selector type="campaign"
+      <ContextSelector type="campaign"
         :apiUrl="apiUrl"
         :faction="faction"
         :selection.sync="campaign"/>
-      <credits
+      <Credits
         :apiUrl="apiUrl"
         :faction="faction"
         :campaign="campaign"/>
-      <units
+      <Units
         :apiUrl="apiUrl"
         :faction="faction"
         :campaign="campaign"
         :units.sync="units"/>
-      <airbase
+      <Airbase
         :apiUrl="apiUrl"
         :campaign="campaign"
         :faction="faction"
         :airbase.sync="airbase"/>
-      <basket
+      <Basket
         :apiUrl="apiUrl"
         :campaign="campaign"
         :faction="faction"/>
-      <command-map
-        :apiUrl="apiUrl"
-        :campaign="campaign"
-        :faction="faction"
-        :airbase.sync="airbase"
-        :units.sync="units"/>
+      <Map/>
     </div>
   </div>
 </template>
@@ -42,9 +37,9 @@ import JWTProvider from './components/JWTProvider.vue'
 import ContextSelector from './components/ContextSelector.vue'
 import Airbase from './components/Airbase.vue'
 import Units from './components/Units.vue'
-import CommandMap from './components/CommandMap.vue'
 import Basket from './components/Basket.vue'
 import Credits from './components/Credits.vue'
+import Map from './components/Map.vue'
 
 export default {
   name: 'App',
@@ -63,9 +58,9 @@ export default {
     ContextSelector,
     Airbase,
     Units,
-    CommandMap,
     Basket,
-    Credits
+    Credits,
+    Map
   },
   methods: {
 
