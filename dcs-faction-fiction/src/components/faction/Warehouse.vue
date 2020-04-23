@@ -5,7 +5,7 @@
 
 <template>
   <div v-if="airbase">
-    Warehouse of {{airbase}}:
+    Warehouse of {{airbase}}: <br/>
     <span class="csv" v-for="w in warehouse.items" :key="w.name">
       {{w.name}}({{w.amount}})
     </span>

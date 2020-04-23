@@ -10,7 +10,7 @@
       
       <md-tab v-show="isFactionManager" :md-disabled="!isFactionManager" md-label="Faction manager">
 
-        <div class="md-layout md-gutter md-alignment-center-left">
+        <div class="md-layout md-gutter md-alignment-top-left">
           <div class="md-layout-item md-size-15">
             <ContextSelector type="faction"
                 :apiUrl="apiUrl"
@@ -30,7 +30,7 @@
           :faction="faction"
           :campaign="campaign"/>
 
-        <div class="md-layout md-gutter md-alignment-center-left">
+        <div class="md-layout md-gutter md-alignment-top-left">
           <div class="md-layout-item">
             <Airbase
               :apiUrl="apiUrl"
