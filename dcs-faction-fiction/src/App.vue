@@ -1,46 +1,54 @@
 <template>
   <div id="app">
+    
+    <JWTProvider 
+      :loggedIn.sync="loggedIn"
+      :isFactionManager.sync="isFactionManager"
+      :isCampaignManager.sync="isCampaignManager"
+    />
 
-    <JWTProvider :loggedIn.sync="loggedIn"/>
-
-    <div v-show="loggedIn">
-      <CampaignManager
-        :apiUrl="apiUrl"/>
-    </div>
-
-    <div v-show="loggedIn">
-      <ContextSelector type="faction"
+    <md-tabs v-show="loggedIn">
+      
+      <md-tab v-show="isFactionManager" md-label="Faction manager">
+        <ContextSelector type="faction"
         :apiUrl="apiUrl"
         :selection.sync="faction"/>
-      <ContextSelector type="campaign"
-        :apiUrl="apiUrl"
-        :faction="faction"
-        :selection.sync="campaign"/>
-      <Credits
-        :apiUrl="apiUrl"
-        :faction="faction"
-        :campaign="campaign"/>
-      <Units
-        :apiUrl="apiUrl"
-        :faction="faction"
-        :campaign="campaign"
-        :units.sync="units"/>
-      <Airbase
-        :apiUrl="apiUrl"
-        :campaign="campaign"
-        :faction="faction"
-        :airbase.sync="airbase"/>
-      <Basket
-        :apiUrl="apiUrl"
-        :campaign="campaign"
-        :faction="faction"/>
-      <UnitMap
-        :apiUrl="apiUrl"
-        :campaign="campaign"
-        :faction="faction"
-        :airbase="airbase"
-        :units.sync="units"/>
-    </div>
+        <ContextSelector type="campaign"
+          :apiUrl="apiUrl"
+          :faction="faction"
+          :selection.sync="campaign"/>
+        <Credits
+          :apiUrl="apiUrl"
+          :faction="faction"
+          :campaign="campaign"/>
+        <Units
+          :apiUrl="apiUrl"
+          :faction="faction"
+          :campaign="campaign"
+          :units.sync="units"/>
+        <Airbase
+          :apiUrl="apiUrl"
+          :campaign="campaign"
+          :faction="faction"
+          :airbase.sync="airbase"/>
+        <Basket
+          :apiUrl="apiUrl"
+          :campaign="campaign"
+          :faction="faction"/>
+        <UnitMap
+          :apiUrl="apiUrl"
+          :campaign="campaign"
+          :faction="faction"
+          :airbase="airbase"
+          :units.sync="units"/>
+      </md-tab>
+
+      <md-tab v-show="isCampaignManager" md-label="Campaign manager">
+        <CampaignManager
+          :apiUrl="apiUrl"/>
+      </md-tab>
+
+    </md-tabs>
   </div>
 </template>
 
@@ -62,6 +70,8 @@ export default {
     return {
       apiUrl: 'http://95.216.78.27:8080',
       loggedIn: false,
+      isFactionManager: false,
+      isCampaignManager: false,
       faction: localStorage.faction,
       campaign: localStorage.campaign,
       airbase: localStorage.airbase,

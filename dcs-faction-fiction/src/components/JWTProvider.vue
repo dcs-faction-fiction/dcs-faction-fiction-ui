@@ -7,11 +7,11 @@ Takes care of obtaining the JWT, saving it to the local store, and triggering lo
 <template>
   <div>
     <div v-show="!localLoggedIn">
-      <input v-model="localToken"/>
-      <button @click="login">LOGIN</button>
+      <md-field><md-input v-model="localToken"/></md-field>
+      <md-button @click="login">LOGIN</md-button>
     </div>
     <div v-show="localLoggedIn">
-      <button @click="logout">LOGOUT</button>
+      <md-button @click="logout">LOGOUT</md-button>
     </div>
   </div>
 </template>
@@ -20,6 +20,8 @@ Takes care of obtaining the JWT, saving it to the local store, and triggering lo
 export default {
   props: {
     loggedIn: Boolean,
+    isFactionManager: Boolean,
+    isCampaignManager: Boolean
   },
   data() {
     return {
@@ -29,22 +31,52 @@ export default {
   },
   methods: {
     login() {
-      localStorage.token = this.localToken
       this.localLoggedIn = !! this.localToken
       this.$emit('update:loggedIn', this.localLoggedIn)
-      this.$eventHub.$emit('logged-in')
+      if (this.localToken) {
+        var t = this
+        // This is a quick way to check a valid token as this
+        // api is basically public to anyone that has a token
+        fetch(this.apiUrl+'/common-api/enums', {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer' + this.localToken,
+          }
+        })
+        .then(() => {
+          localStorage.token = t.localToken
+          t.updateRoles()
+          t.$eventHub.$emit('logged-in')
+        })
+        .catch(err => console.log(err))
+      }
     },
     logout() {
-      localStorage.token = undefined
+      delete localStorage.token
       this.localToken = undefined
       this.localLoggedIn = false
       this.$emit('update:loggedIn', this.localLoggedIn)
       this.$eventHub.$emit('logged-out')
+    },
+    updateRoles() {
+      var jwtExploded = this.parseJwt(localStorage.token)
+      this.$emit('update:isFactionManager', jwtExploded.roles.includes("faction_manager"))
+      this.$emit('update:isCampaignManager', jwtExploded.roles.includes("campaign_manager"))
+    },
+    parseJwt(token) {
+      var base64Url = token.split('.')[1]
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      }).join(''))
+
+      return JSON.parse(jsonPayload)
     }
   },
   mounted() {
     this.localLoggedIn = !! this.localToken
-    if (this.localToken) {
+    if (localStorage.token) {
+      this.updateRoles()
       this.$emit('update:loggedIn', true)
       this.$eventHub.$emit('logged-in')
     }
