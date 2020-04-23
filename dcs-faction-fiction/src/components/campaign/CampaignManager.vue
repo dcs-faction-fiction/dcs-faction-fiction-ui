@@ -1,12 +1,20 @@
 <template>
   <div>
-    <select v-model="campaign">
-      <option v-for="c in campaigns" :key="c">{{c}}</option>
-    </select>
-
-    <CampaignGiveCredits
-      :apiUrl="apiUrl"
-      :campaign="campaign"/>
+    <div class="md-layout md-gutter">
+      <div class="md-layout-item md-size-15">
+        <md-field>
+          <label>Campaign</label>
+          <md-select v-model="campaign">
+            <md-option v-for="c in campaigns" :key="c" :value="c">{{c}}</md-option>
+          </md-select>
+        </md-field>
+      </div>
+      <div class="md-layout-item">
+        <CampaignGiveCredits
+          :apiUrl="apiUrl"
+          :campaign="campaign"/>
+      </div>
+    </div>
   </div>
 </template>
 

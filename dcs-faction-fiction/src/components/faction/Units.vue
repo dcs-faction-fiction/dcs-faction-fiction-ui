@@ -4,16 +4,18 @@
 -->
 
 <template>
-  <div>
-    <select v-model="newUnit.type">
-      <option v-for="s in availableUnits" :key="s">{{s}}</option>
-    </select>
-    <input v-model="newUnit.lat" />
-    <input v-model="newUnit.lon" />
-    <button v-on:click="buyUnit">+</button><br />
-
-    Units: {{localUnits}}
-
+  <div class="md-layout md-gutter" v-if="newUnit.lat && newUnit.lon">
+    <div class="md-layout-item">
+      <md-field>
+        <label>Unit type</label>
+        <md-select v-model="newUnit.type">
+          <md-option v-for="s in availableUnits" :key="s" :value="s">{{s}}</md-option>
+        </md-select>
+      </md-field>
+    </div>
+    <div class="md-layout-item">
+      <md-button v-on:click="buyUnit">ADD</md-button>
+    </div>
   </div>
 </template>
 
@@ -172,5 +174,4 @@ export default {
 </script>
 
 <style>
-
 </style>

@@ -4,7 +4,12 @@
 -->
 
 <template>
-  <div>{{warehouse}}</div>
+  <div v-if="airbase">
+    Warehouse of {{airbase}}:
+    <span class="csv" v-for="w in warehouse.items" :key="w.name">
+      {{w.name}}({{w.amount}})
+    </span>
+  </div>
 </template>
 
 <script>
@@ -62,5 +67,7 @@ export default {
 </script>
 
 <style>
-
+.csv + .csv:before {
+  content: ", ";
+}
 </style>

@@ -4,19 +4,27 @@
     <JWTProvider 
       :loggedIn.sync="loggedIn"
       :isFactionManager.sync="isFactionManager"
-      :isCampaignManager.sync="isCampaignManager"
-    />
+      :isCampaignManager.sync="isCampaignManager"/>
 
     <md-tabs v-show="loggedIn">
       
       <md-tab v-show="isFactionManager" :md-disabled="!isFactionManager" md-label="Faction manager">
-        <ContextSelector type="faction"
-        :apiUrl="apiUrl"
-        :selection.sync="faction"/>
-        <ContextSelector type="campaign"
-          :apiUrl="apiUrl"
-          :faction="faction"
-          :selection.sync="campaign"/>
+
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item md-size-15">
+            <ContextSelector type="faction"
+                :apiUrl="apiUrl"
+                :selection.sync="faction"/>
+          </div>
+          <div class="md-layout-item md-size-15">
+            <ContextSelector type="campaign"
+                :apiUrl="apiUrl"
+                :faction="faction"
+                :selection.sync="campaign"/>
+          </div>
+          <div class="md-layout-item"></div>
+        </div>
+        
         <Credits
           :apiUrl="apiUrl"
           :faction="faction"

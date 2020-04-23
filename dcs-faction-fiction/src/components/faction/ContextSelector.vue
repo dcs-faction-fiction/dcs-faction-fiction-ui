@@ -6,9 +6,13 @@ This includes faction, campaign, airbase and all remaining to make the other com
 -->
 
 <template>
-  <select v-model="localSelection">
-    <option v-for="o in options" :key="o">{{o}}</option>
-  </select>
+  <md-field>
+    <label v-if="type=='faction'">Faction</label>
+    <label v-if="type=='campaign'">Campaign</label>
+    <md-select v-model="localSelection">
+      <md-option v-for="o in options" :key="o" :value="o">{{o}}</md-option>
+    </md-select>
+  </md-field>
 </template>
 
 <script>

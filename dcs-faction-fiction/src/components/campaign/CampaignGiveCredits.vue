@@ -1,10 +1,24 @@
 <template>
   <div>
-    <select v-model="faction">
-      <option v-for="f in factions" :key="f.faction">{{f.faction}}</option>
-    </select>
-    <input v-model="credits"/>
-    <button @click="giveCredits">GIVE</button>
+    <div class="md-layout md-layout-item md-gutter">
+      <div class="md-layout-item md-size-15">
+        <md-field>
+          <Label>Faction</Label>
+          <md-select v-model="faction">
+            <md-option v-for="f in factions" :key="f.faction" :value="f.faction">{{f.faction}}</md-option>
+          </md-select>
+        </md-field>
+      </div>
+      <div class="md-layout-item md-size-15">
+        <md-field>
+          <label>Give credits</label>
+          <md-input v-model="credits"/>
+        </md-field>
+      </div>
+      <div class="md-layout-item md-size-10">
+        <md-button @click="giveCredits">GIVE</md-button>
+      </div>
+    </div>
   </div>
 </template>
 

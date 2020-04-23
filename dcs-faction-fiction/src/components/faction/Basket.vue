@@ -5,15 +5,35 @@
 
 <template>
   <div>
-<br/>
-    <select v-model="selectedItem">
-      <option v-for="i in availableItems" :key="i">{{i}}</option>
-    </select>
-    <input v-model="selectedQuantity"/>
-    <button @click="add">ADD</button>
-    <br/>
+
+    <div class="md-layout md-gutter">
+
+      <div class="md-layout-item">
+        <md-field>
+          <label>Type</label>
+          <md-select v-model="selectedItem">
+            <md-option v-for="i in availableItems" :key="i" :value="i">{{i}}</md-option>
+          </md-select>
+        </md-field>
+      </div>
+      <div class="md-layout-item">
+        <md-field>
+          <label>Amount</label>
+          <md-input v-model="selectedQuantity"/>
+        </md-field>
+      </div>
+      <div class="md-layout-item">
+        <md-button @click="add">Add to basket</md-button>
+      </div>
+
+    </div>
     
-    Basket({{estimate}}c): {{basket}}
+    Basket:
+    <span class="csv" v-for="(qty, name) in basket" :key="name">
+      {{name}}({{qty}})
+    </span>
+    <br/>
+    Cost to buy: ({{estimate}}c)
     <br/>
     <button @click="buy">BUY</button>
     <button @click="emptyBasket">EMPTY BASKET</button>
@@ -115,5 +135,7 @@ export default {
 </script>
 
 <style>
-
+.csv + .csv:before {
+  content: ", ";
+}
 </style>

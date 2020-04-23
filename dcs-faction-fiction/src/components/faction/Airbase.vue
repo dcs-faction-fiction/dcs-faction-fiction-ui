@@ -5,7 +5,7 @@
 
 <template>
   <div>
-    {{localAirbase ? localAirbase.airbase : ""}}
+    Your base is: {{localAirbase ? localAirbase.airbase : ""}}
     <warehouse v-if="airbase"
       :apiUrl="apiUrl"
       :faction="faction"
