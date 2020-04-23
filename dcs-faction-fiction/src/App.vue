@@ -10,7 +10,7 @@
       
       <md-tab v-show="isFactionManager" :md-disabled="!isFactionManager" md-label="Faction manager">
 
-        <div class="md-layout md-gutter">
+        <div class="md-layout md-gutter md-alignment-center-left">
           <div class="md-layout-item md-size-15">
             <ContextSelector type="faction"
                 :apiUrl="apiUrl"
@@ -29,20 +29,29 @@
           :apiUrl="apiUrl"
           :faction="faction"
           :campaign="campaign"/>
+
+        <div class="md-layout md-gutter md-alignment-center-left">
+          <div class="md-layout-item">
+            <Airbase
+              :apiUrl="apiUrl"
+              :campaign="campaign"
+              :faction="faction"
+              :airbase.sync="airbase"/>
+          </div>
+          <div class="md-layout-item">
+            <Basket
+              :apiUrl="apiUrl"
+              :campaign="campaign"
+              :faction="faction"/>
+            
+          </div>
+        </div>
+
         <Units
           :apiUrl="apiUrl"
           :faction="faction"
           :campaign="campaign"
           :units.sync="units"/>
-        <Airbase
-          :apiUrl="apiUrl"
-          :campaign="campaign"
-          :faction="faction"
-          :airbase.sync="airbase"/>
-        <Basket
-          :apiUrl="apiUrl"
-          :campaign="campaign"
-          :faction="faction"/>
         <UnitMap
           :apiUrl="apiUrl"
           :campaign="campaign"

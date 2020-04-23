@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="md-layout md-layout-item md-gutter">
+    <div class="md-layout md-layout-item md-gutter md-alignment-center-left">
       <div class="md-layout-item md-size-15">
         <md-field>
           <Label>Faction</Label>

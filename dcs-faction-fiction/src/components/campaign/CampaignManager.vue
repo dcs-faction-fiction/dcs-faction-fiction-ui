@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="md-layout md-gutter">
+    <div class="md-layout md-gutter md-alignment-center-left">
       <div class="md-layout-item md-size-15">
         <md-field>
           <label>Campaign</label>

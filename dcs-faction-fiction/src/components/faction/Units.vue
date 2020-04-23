@@ -4,8 +4,8 @@
 -->
 
 <template>
-  <div class="md-layout md-gutter" v-if="newUnit.lat && newUnit.lon">
-    <div class="md-layout-item">
+  <div class="md-layout md-gutter md-alignment-center-left" v-if="newUnit.lat && newUnit.lon">
+    <div class="md-layout-item md-size-20">
       <md-field>
         <label>Unit type</label>
         <md-select v-model="newUnit.type">

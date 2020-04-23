@@ -6,9 +6,8 @@
 <template>
   <div>
 
-    <div class="md-layout md-gutter">
-
-      <div class="md-layout-item">
+    <div class="md-layout md-gutter md-alignment-center-left">
+      <div class="md-layout-item md-size-50">
         <md-field>
           <label>Type</label>
           <md-select v-model="selectedItem">
@@ -16,7 +15,7 @@
           </md-select>
         </md-field>
       </div>
-      <div class="md-layout-item">
+      <div class="md-layout-item md-size-10">
         <md-field>
           <label>Amount</label>
           <md-input v-model="selectedQuantity"/>
@@ -25,19 +24,30 @@
       <div class="md-layout-item">
         <md-button @click="add">Add to basket</md-button>
       </div>
+    </div>
+    <div class="md-layout md-alignment-center-left">
+      <div class="md-layout-item">
+        Basket<br/>
+        <span class="csv" v-for="(qty, name) in basket" :key="name">
+          {{name}}({{qty}})
+        </span>
+      </div>
+    </div>
 
+    <div class="md-layout md-alignment-center-center">
+      <div class="md-layout-item">
+        Cost to buy: ({{estimate}}c)
+      </div>
+    </div>
+
+    <div class="md-layout md-alignment-center-center">
+      <div class="md-layout-item">
+        
+    <md-button @click="buy">BUY</md-button>
+    <md-button @click="emptyBasket">EMPTY BASKET</md-button>
+      </div>
     </div>
     
-    Basket:
-    <span class="csv" v-for="(qty, name) in basket" :key="name">
-      {{name}}({{qty}})
-    </span>
-    <br/>
-    Cost to buy: ({{estimate}}c)
-    <br/>
-    <button @click="buy">BUY</button>
-    <button @click="emptyBasket">EMPTY BASKET</button>
-<br/><br/>
   </div>
 </template>
 
