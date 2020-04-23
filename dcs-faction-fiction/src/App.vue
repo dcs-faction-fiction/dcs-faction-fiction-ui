@@ -9,7 +9,7 @@
 
     <md-tabs v-show="loggedIn">
       
-      <md-tab v-show="isFactionManager" md-label="Faction manager">
+      <md-tab v-show="isFactionManager" :md-disabled="!isFactionManager" md-label="Faction manager">
         <ContextSelector type="faction"
         :apiUrl="apiUrl"
         :selection.sync="faction"/>
@@ -43,7 +43,7 @@
           :units.sync="units"/>
       </md-tab>
 
-      <md-tab v-show="isCampaignManager" md-label="Campaign manager">
+      <md-tab v-show="isCampaignManager" :md-disabled="!isCampaignManager" md-label="Campaign manager">
         <CampaignManager
           :apiUrl="apiUrl"/>
       </md-tab>
