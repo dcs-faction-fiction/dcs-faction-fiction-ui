@@ -4,7 +4,17 @@
 -->
 
 <template>
-  <div>{{localUnits}}</div>
+  <div>
+    <select v-model="newUnit.type">
+      <option v-for="s in availableUnits" :key="s">{{s}}</option>
+    </select>
+    <input v-model="newUnit.lat" />
+    <input v-model="newUnit.lon" />
+    <button v-on:click="buyUnit">+</button><br />
+
+    Units: {{localUnits}}
+
+  </div>
 </template>
 
 <script>
@@ -20,10 +30,30 @@ export default {
   },
   data() {
     return {
-      localUnits: this.units
+      localUnits: this.units,
+      availableUnits: [],
+      newUnit: {
+        type: undefined,
+        lat: 0,
+        lon: 0
+      },
     }
   },
   methods: {
+    loadAvailableItems() {
+      fetch(this.apiUrl+'/common-api/enums', {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer' + localStorage.token,
+        }
+      })
+      .then(r => r.json())
+      .then(data => {
+        this.availableUnits = data.units
+        this.newUnit.type = this.newUnit.type ? this.newUnit.type : this.availableUnits[0]
+      })
+      .catch(err => console.log(err))
+    },
     async saveUnits(unitsToSave) {
       var toAdd = []
       var toPlace = []
@@ -72,6 +102,27 @@ export default {
         })
       }
     },
+    async buyUnit() {
+      var req = {}
+      req.type = this.newUnit.type
+      req.location = {}
+      req.location.latitude = this.newUnit.lat
+      req.location.longitude = this.newUnit.lon
+      req.location.altitude = 0
+      req.location.angle = 0
+      await fetch(this.apiUrl+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns/'+localStorage.campaign+'/units', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer' + localStorage.token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(req)
+      })
+      .then(() => {
+        this.getUnits()
+        this.$eventHub.$emit('credits-update')
+      })
+    },
     getUnits() {
       if (!this.campaign || !this.faction) {
         return
@@ -104,10 +155,18 @@ export default {
     }
   },
   created() {
-    this.$eventHub.$on('logged-in', this.getUnits);
+    this.$eventHub.$on('logged-in', () => {
+      this.loadAvailableItems()      
+      this.getUnits()
+    });
+    this.$eventHub.$on('latlon-selected', (latlon) => {
+      this.newUnit.lat = latlon.lat
+      this.newUnit.lon = latlon.lon
+    })
   },
   beforeDestroy() {
-    this.$eventHub.$off('logged-in');
+    this.$eventHub.$off('logged-in')
+    this.$eventHub.$off('latlng-selected')
   }
 }
 </script>

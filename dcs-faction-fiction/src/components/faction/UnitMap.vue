@@ -73,11 +73,15 @@ export default {
         newunits[id].location.longitude = lon
         this.$emit('update:units', newunits)
       }
+    },
+    mapClickedAt(lat, lon) {
+      this.$eventHub.$emit('latlon-selected', {lat: lat, lon: lon})
     }
   },
   mounted() {
     if (!this.map) {
       this.map = L.map('map')
+      this.map.on('click', e => this.mapClickedAt(e.latlng.lat, e.latlng.lng))
       mapLayer.addTo(this.map)
       terrainLayer.addTo(this.map)
       setTimeout(() => this.map.invalidateSize(), 0)
@@ -111,14 +115,15 @@ export default {
         // Create the marker
         var marker = L.marker([u.location.latitude, u.location.longitude], {
           draggable: 'true',
-          icon: L.divIcon({html: '<div>'+u.type+'</div>'})
+          icon: L.divIcon({html: '<div>'+u.type+'</div>'}),
+          id: prop
         })
         
         // Assign the event behavior
         marker.on('dragend', e => {
           var marker = e.target
           var position = marker.getLatLng()
-          t.changeUnitPosition(prop, position.lat, position.lng)
+          t.changeUnitPosition(marker.options.id, position.lat, position.lng)
         });
 
         // Add it to the map and array

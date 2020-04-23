@@ -50,9 +50,11 @@ export default {
   },
   created() {
     this.$eventHub.$on('logged-in', this.getCredits);
+    this.$eventHub.$on('credits-update', this.getCredits);
   },
   beforeDestroy() {
     this.$eventHub.$off('logged-in');
+    this.$eventHub.$off('credits-update');
   }
 }
 </script>

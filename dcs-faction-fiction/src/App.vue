@@ -1,6 +1,13 @@
 <template>
   <div id="app">
+
     <JWTProvider :loggedIn.sync="loggedIn"/>
+
+    <div v-show="loggedIn">
+      <CampaignManager
+        :apiUrl="apiUrl"/>
+    </div>
+
     <div v-show="loggedIn">
       <ContextSelector type="faction"
         :apiUrl="apiUrl"
@@ -39,18 +46,21 @@
 
 <script>
 import JWTProvider from './components/JWTProvider.vue'
-import ContextSelector from './components/ContextSelector.vue'
-import Airbase from './components/Airbase.vue'
-import Units from './components/Units.vue'
-import Basket from './components/Basket.vue'
-import Credits from './components/Credits.vue'
-import UnitMap from './components/UnitMap.vue'
+
+import CampaignManager from './components/campaign/CampaignManager.vue'
+
+import ContextSelector from './components/faction/ContextSelector.vue'
+import Airbase from './components/faction/Airbase.vue'
+import Units from './components/faction/Units.vue'
+import Basket from './components/faction/Basket.vue'
+import Credits from './components/faction/Credits.vue'
+import UnitMap from './components/faction/UnitMap.vue'
 
 export default {
   name: 'App',
   data() {
     return {
-      apiUrl: 'http://localhost:8080',
+      apiUrl: 'http://95.216.78.27:8080',
       loggedIn: false,
       faction: localStorage.faction,
       campaign: localStorage.campaign,
@@ -60,6 +70,7 @@ export default {
   },
   components: {
     JWTProvider,
+    CampaignManager,
     ContextSelector,
     Airbase,
     Units,

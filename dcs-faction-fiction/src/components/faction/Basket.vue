@@ -100,6 +100,7 @@ export default {
       .then(() => {
         this.emptyBasket()
         this.$eventHub.$emit('warehouse-update')
+        this.$eventHub.$emit('credits-update')
       })
       .catch(err => console.log(err))
     }
