@@ -53,6 +53,8 @@ export default {
       var coords = this.getAirbaseCoords()
       if (this.mapObjects['airbase']) {
         this.mapObjects['airbase'].remove()
+      } else {
+        this.map.setView(coords)
       }
       this.mapObjects['airbase'] = new L.Circle(coords, this.airbase.zoneSizeFt * 0.3048, {
         stroke: true,
@@ -89,8 +91,6 @@ export default {
   },
   watch: {
     airbase() {
-      var coords = this.getAirbaseCoords()
-      this.map.setView(coords)
       this.replaceAirbase()
       setTimeout(() => this.map.invalidateSize(), 0)
     },

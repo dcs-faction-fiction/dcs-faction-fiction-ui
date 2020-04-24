@@ -13,7 +13,7 @@
             :selection.sync="faction"/>
       </div>
       <div class="md-layout-item">
-        <md-button>Download MIZ</md-button>
+        <md-button @click="downloadMission">Download MIZ</md-button>
       </div>
       <div class="md-layout-item">
         <CampaignGiveCredits
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+var download = require("downloadjs");
 import ContextSelector from '../ContextSelector.vue';
 import CampaignGiveCredits from './CampaignGiveCredits.vue';
 
@@ -43,6 +44,20 @@ export default {
     }
   },
   methods: {
+    downloadMission() {
+      if (!this.campaign || !this.faction) {
+        return
+      }
+
+      fetch(this.apiUrl+'/campaignmanager-api/campaigns/'+this.campaign+'/download-mission', {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer '+localStorage.token
+        }
+      })
+      .then(r => r.blob())
+      .then(b => download(b, "mission.miz"));
+    }
   },
   watch: {
     campaign(v) {
