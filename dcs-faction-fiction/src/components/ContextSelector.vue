@@ -41,10 +41,13 @@ export default {
   methods: {
     getItems() {
       var path = this.apiUrl
+      var dataTransformer = a => a
       switch (this.type) {
         case 'faction':
           if (this.campaign) {
             path += '/campaignmanager-api/campaigns/'+this.campaign+'/factions'
+            // These factions are more than simple string arrays
+            dataTransformer = a => a.map(b => b.faction)
           } else {
             path += '/factionmanager-api/factions'
           }
@@ -64,11 +67,18 @@ export default {
         },
       })
       .then(resp => resp.json())
+      .then(dataTransformer)
       .then(data => this.options = data)
       .catch(err => console.log(err))
     }
   },
   watch: {
+    faction() {
+      this.getItems()
+    },
+    campaign() {
+      this.getItems()
+    },
     localSelection(val) {
       this.$emit('update:selection', val)
     }

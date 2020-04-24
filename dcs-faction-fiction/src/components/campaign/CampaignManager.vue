@@ -1,13 +1,19 @@
 <template>
   <div>
-    <div class="md-layout md-gutter md-alignment-center-left">
+    <div class="md-layout md-gutter md-alignment-top-left">
       <div class="md-layout-item md-size-15">
-        <md-field>
-          <label>Campaign</label>
-          <md-select v-model="campaign">
-            <md-option v-for="c in campaigns" :key="c" :value="c">{{c}}</md-option>
-          </md-select>
-        </md-field>
+        <ContextSelector type="campaign"
+            :apiUrl="apiUrl"
+            :selection.sync="campaign"/>
+      </div>
+      <div class="md-layout-item md-size-15">
+        <ContextSelector type="faction"
+            :apiUrl="apiUrl"
+            :campaign="campaign"
+            :selection.sync="faction"/>
+      </div>
+      <div class="md-layout-item">
+        <md-button>Download MIZ</md-button>
       </div>
       <div class="md-layout-item">
         <CampaignGiveCredits
@@ -19,6 +25,7 @@
 </template>
 
 <script>
+import ContextSelector from '../ContextSelector.vue';
 import CampaignGiveCredits from './CampaignGiveCredits.vue';
 
 export default {
@@ -30,41 +37,23 @@ export default {
   },
   data() {
     return {
-      campaigns: [],
-      campaign: localStorage.campaignManagerCampaign
+      campaign: localStorage.campaignManagerCampaign,
+      faction: localStorage.campaignManagerFaction
     }
   },
   methods: {
-    getCampaigns() {
-      fetch(this.apiUrl+'/campaignmanager-api/campaigns', {
-        method: 'GET',
-        headers: {
-          'Authorization': 'Bearer '+localStorage.token
-        },
-      })
-      .then(resp => resp.json())
-      .then(data => {
-        this.campaigns = data
-        if (!this.campaign) {
-          this.campaign = data[0]
-        }
-      })
-      .catch(err => console.log(err))
-    }
   },
   watch: {
     campaign(v) {
       localStorage.campaignManagerCampaign = v
+    },
+    faction(v) {
+      localStorage.campaignManagerFaction = v
     }
   },
   components: {
-    CampaignGiveCredits
-  },
-  created() {
-    this.$eventHub.$on('logged-in', this.getCampaigns);
-  },
-  beforeDestroy() {
-    this.$eventHub.$off('logged-in');
+    CampaignGiveCredits,
+    ContextSelector
   }
 }
 </script>

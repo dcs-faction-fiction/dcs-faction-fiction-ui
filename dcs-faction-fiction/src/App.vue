@@ -71,10 +71,10 @@
 
 <script>
 import JWTProvider from './components/JWTProvider.vue'
+import ContextSelector from './components/ContextSelector.vue'
 
 import CampaignManager from './components/campaign/CampaignManager.vue'
 
-import ContextSelector from './components/faction/ContextSelector.vue'
 import Airbase from './components/faction/Airbase.vue'
 import Units from './components/faction/Units.vue'
 import Basket from './components/faction/Basket.vue'
@@ -85,7 +85,7 @@ export default {
   name: 'App',
   data() {
     return {
-      apiUrl: 'http://95.216.78.27:8080',
+      apiUrl: 'https://95.216.78.27:8443',
       loggedIn: false,
       isFactionManager: false,
       isCampaignManager: false,

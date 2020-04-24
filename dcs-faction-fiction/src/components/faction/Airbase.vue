@@ -5,7 +5,15 @@
 
 <template>
   <div>
-    Your base is: {{localAirbase ? localAirbase.airbase : ""}}
+    Your base is: {{localAirbase ? localAirbase.airbase : ""}}.
+    Your base zone radius is: {{airbase.zoneSizeFt}}ft.
+  <br/>
+    Click +/- buttons to increase/decrease, each increase is 50000ft and costs 2c.
+    You can decrease, down to the minimum, and regain 1c each time.
+  <br/>
+    <md-button @click="increaseAirbase">+</md-button>
+    <md-button @click="decreaseAirbase">-</md-button>
+  <br/>
     <warehouse v-if="airbase"
       :apiUrl="apiUrl"
       :faction="faction"
@@ -48,6 +56,43 @@ export default {
       })
       .then(resp => resp.json())
       .then(data => this.updateAirbase(data))
+      .catch(err => console.log(err))
+    },
+    increaseAirbase() {
+      if (!this.campaign || !this.faction) {
+        return
+      }
+      var t = this
+      fetch(this.apiUrl+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns/'+localStorage.campaign+'/zone', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer '+localStorage.token
+        },
+        body: '{}'
+      })
+      .then(resp => resp.json())
+      .then(() => {
+        t.$eventHub.$emit('credits-update')
+        t.getAirbase()
+      })
+      .catch(err => console.log(err))
+    },
+    decreaseAirbase() {
+      if (!this.campaign || !this.faction) {
+        return
+      }
+      var t = this
+      fetch(this.apiUrl+'/factionmanager-api/factions/'+localStorage.faction+'/campaigns/'+localStorage.campaign+'/zone', {
+        method: 'DELETE',
+        headers: {
+          'Authorization': 'Bearer '+localStorage.token
+        }
+      })
+      .then(resp => resp.json())
+      .then(() => {
+        t.$eventHub.$emit('credits-update')
+        t.getAirbase()
+      })
       .catch(err => console.log(err))
     },
     updateAirbase(airbase) {

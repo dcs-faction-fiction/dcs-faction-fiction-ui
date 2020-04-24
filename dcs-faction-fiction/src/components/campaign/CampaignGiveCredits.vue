@@ -3,14 +3,6 @@
     <div class="md-layout md-layout-item md-gutter md-alignment-center-left">
       <div class="md-layout-item md-size-15">
         <md-field>
-          <Label>Faction</Label>
-          <md-select v-model="faction">
-            <md-option v-for="f in factions" :key="f.faction" :value="f.faction">{{f.faction}}</md-option>
-          </md-select>
-        </md-field>
-      </div>
-      <div class="md-layout-item md-size-15">
-        <md-field>
           <label>Give credits</label>
           <md-input v-model="credits"/>
         </md-field>
@@ -33,8 +25,6 @@ export default {
   },
   data() {
     return {
-      factions: [],
-      faction: localStorage.campaignManagerFaction,
       credits: 0
     }
   },
