@@ -18,7 +18,8 @@
       <div class="md-layout-item">
         <CampaignGiveCredits
           :apiUrl="apiUrl"
-          :campaign="campaign"/>
+          :campaign="campaign"
+          :faction="faction"/>
       </div>
     </div>
   </div>

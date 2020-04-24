@@ -21,7 +21,8 @@ export default {
       type: String,
       required: true
     },
-    campaign: {}
+    campaign: {},
+    faction: {}
   },
   data() {
     return {
@@ -47,41 +48,7 @@ export default {
       })
       .catch(err => console.log(err))
       this.credits = 0
-    },
-    getFactions() {
-      if (!this.campaign) {
-        return
-      }
-
-      fetch(this.apiUrl+'/campaignmanager-api/campaigns/'+this.campaign+'/factions', {
-        method: 'GET',
-        headers: {
-          'Authorization': 'Bearer '+localStorage.token
-        },
-      })
-      .then(resp => resp.json())
-      .then(data => {
-        this.factions = data
-        if (!this.faction) {
-          this.faction = data[0]
-        }
-      })
-      .catch(err => console.log(err))
     }
-  },
-  watch: {
-    campaign() {
-      this.getFactions()
-    },
-    faction(v) {
-      localStorage.campaignManagerFaction = v
-    }
-  },
-  created() {
-    this.$eventHub.$on('logged-in', this.getFactions);
-  },
-  beforeDestroy() {
-    this.$eventHub.$off('logged-in');
   }
 }
 </script>

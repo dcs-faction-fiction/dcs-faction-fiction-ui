@@ -80,7 +80,7 @@ export default {
   },
   mounted() {
     if (!this.map) {
-      this.map = L.map('map')
+      this.map = L.map('map', {zoom: 8})
       this.map.on('click', e => this.mapClickedAt(e.latlng.lat, e.latlng.lng))
       mapLayer.addTo(this.map)
       terrainLayer.addTo(this.map)
@@ -90,7 +90,7 @@ export default {
   watch: {
     airbase() {
       var coords = this.getAirbaseCoords()
-      this.map.setView(coords, 8)
+      this.map.setView(coords)
       this.replaceAirbase()
       setTimeout(() => this.map.invalidateSize(), 0)
     },
