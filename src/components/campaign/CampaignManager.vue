@@ -12,14 +12,24 @@
             :campaign="campaign"
             :selection.sync="faction"/>
       </div>
-      <div class="md-layout-item">
-        <md-button @click="downloadMission">Download MIZ</md-button>
+    </div>
+
+    <md-button @click="downloadMission">Download MIZ</md-button>
+    
+    <CampaignGiveCredits
+      :apiUrl="apiUrl"
+      :campaign="campaign"
+      :faction="faction"/>
+
+    <div class="md-layout md-gutter md-alignment-top-left">
+      <div class="md-layout-item md-size-15">
+        <md-field>
+          <label>Server</label>
+          <md-input v-model="server"/>
+        </md-field>
       </div>
-      <div class="md-layout-item">
-        <CampaignGiveCredits
-          :apiUrl="apiUrl"
-          :campaign="campaign"
-          :faction="faction"/>
+      <div class="md-layout-item md-size-15">
+        <md-button @click="startServer">START</md-button>
       </div>
     </div>
   </div>
@@ -40,7 +50,8 @@ export default {
   data() {
     return {
       campaign: localStorage.campaignManagerCampaign,
-      faction: localStorage.campaignManagerFaction
+      faction: localStorage.campaignManagerFaction,
+      server: 'server1'
     }
   },
   methods: {
@@ -57,6 +68,17 @@ export default {
       })
       .then(r => r.blob())
       .then(b => download(b, "mission.miz"));
+    },
+    startServer() {
+      fetch(this.apiUrl+'/campaignmanager-api/campaigns/'+this.campaign+'/runserver', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer '+localStorage.token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({server: this.server})
+      })
+      .catch(err => console.log(err))
     }
   },
   watch: {
