@@ -12,6 +12,11 @@
             :campaign="campaign"
             :selection.sync="faction"/>
       </div>
+      <div class="md-layout-item md-size-15">
+        State {{state}}
+        <br/>
+        Phase {{phase}}
+      </div>
     </div>
 
     <md-button @click="downloadMission">Download MIZ</md-button>
@@ -51,10 +56,35 @@ export default {
     return {
       campaign: localStorage.campaignManagerCampaign,
       faction: localStorage.campaignManagerFaction,
-      server: 'server1'
+      server: 'server1',
+      phase: '',
+      state: ''
     }
   },
   methods: {
+    poll() {
+      if (!this.campaign || !this.faction) {
+        return
+      }
+
+      fetch(this.apiUrl+'/campaignmanager-api/campaigns/'+this.campaign+'/state', {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer '+localStorage.token
+        }
+      })
+      .then(r => r.json())
+      .then(b => this.state = b);
+
+      fetch(this.apiUrl+'/campaignmanager-api/campaigns/'+this.campaign+'/phase', {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer '+localStorage.token
+        }
+      })
+      .then(r => r.json())
+      .then(b => this.phase = b);
+    },
     downloadMission() {
       if (!this.campaign || !this.faction) {
         return
@@ -80,6 +110,9 @@ export default {
       })
       .catch(err => console.log(err))
     }
+  },
+  created() {
+    setInterval(() => this.poll(), 5000)
   },
   watch: {
     campaign(v) {
