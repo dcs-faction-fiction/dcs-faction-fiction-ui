@@ -100,13 +100,13 @@ export default {
       .then(b => download(b, "mission.miz"));
     },
     startServer() {
-      fetch(this.apiUrl+'/campaignmanager-api/campaigns/'+this.campaign+'/runserver', {
-        method: 'POST',
+      fetch(this.apiUrl+'/campaignmanager-api/campaigns/'+this.campaign+'/servers/'+this.server, {
+        method: 'PUT',
         headers: {
           'Authorization': 'Bearer '+localStorage.token,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({server: this.server})
+        body: "{}"
       })
       .catch(err => console.log(err))
     }
