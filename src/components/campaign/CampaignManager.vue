@@ -16,6 +16,12 @@
         State {{state}}
         <br/>
         Phase {{phase}}
+        <br/>
+        <div v-if="serverinfo.address">
+          Server: {{serverinfo.address}}:{{serverinfo.port}}
+          <br/>
+          Password: {{serverinfo.password}}
+        </div>
       </div>
     </div>
 
@@ -58,7 +64,8 @@ export default {
       faction: localStorage.campaignManagerFaction,
       server: 'server1',
       phase: '',
-      state: ''
+      state: '',
+      serverinfo: {}
     }
   },
   methods: {
@@ -120,6 +127,21 @@ export default {
     },
     faction(v) {
       localStorage.campaignManagerFaction = v
+    },
+    phase(v) {
+      if (v == "RUNNING") {
+        fetch(this.apiUrl+'/campaignmanager-api/campaigns/'+this.campaign+'/serverinfo', {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer '+localStorage.token,
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(r => r.json())
+        .then(b => this.serverinfo = b);
+      } else {
+        this.serverinfo = {}
+      }
     }
   },
   components: {
