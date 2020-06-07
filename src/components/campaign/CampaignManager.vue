@@ -43,6 +43,10 @@
         <md-button @click="startServer">START</md-button>
       </div>
     </div>
+
+    <FullMap 
+        :apiUrl="apiUrl"
+        :campaign="campaign"/>
   </div>
 </template>
 
@@ -50,6 +54,7 @@
 var download = require("downloadjs");
 import ContextSelector from '../ContextSelector.vue';
 import CampaignGiveCredits from './CampaignGiveCredits.vue';
+import FullMap from './FullMap.vue';
 
 export default {
   props: {
@@ -146,7 +151,8 @@ export default {
   },
   components: {
     CampaignGiveCredits,
-    ContextSelector
+    ContextSelector,
+    FullMap
   }
 }
 </script>
