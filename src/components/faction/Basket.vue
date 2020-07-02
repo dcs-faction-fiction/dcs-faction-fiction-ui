@@ -29,7 +29,7 @@
       <div class="md-layout-item">
         Basket<br/>
         <span class="csv" v-for="(qty, name) in basket" :key="name">
-          {{name}}({{qty}})
+          {{name}}({{qty}}) <button @click="basketPlus(name)">+</button> <button @click="basketMinus(name)">-</button>
         </span>
       </div>
     </div>
@@ -90,11 +90,7 @@ export default {
       this.estimate = 0
     },
     add() {
-      var count = this.basket[this.selectedItem]
-      count = count ? count : 0
-      count = count + parseInt(this.selectedQuantity)
-      this.$set(this.basket, this.selectedItem, count)
-      this.calculateBasket()
+      this.basketSumAlgeb(this.selectedItem, this.selectedQuantity);
     },
     calculateBasket() {
       var req = {items: []}
@@ -112,6 +108,23 @@ export default {
       .then(r => r.json())
       .then(data => this.estimate = data)
       .catch(err => console.log(err))
+    },
+    basketPlus(name) {
+      this.basketSumAlgeb(name, 1);
+    },
+    basketMinus(name) {
+      this.basketSumAlgeb(name, -1);
+    },
+    basketSumAlgeb(name, num) {
+      var count = this.basket[name]
+      count = count ? count : 0
+      count = count + num
+      if (count > 0) {
+        this.$set(this.basket, this.selectedItem, count)
+      } else {
+        delete this.basket[name]
+      }
+      this.calculateBasket()
     },
     buy() {
       // BUY
