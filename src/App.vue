@@ -22,7 +22,9 @@
                 :faction="faction"
                 :selection.sync="campaign"/>
           </div>
-          <div class="md-layout-item"></div>
+          <div class="md-layout-item">
+            <button @click="showLog">LOG</button>
+          </div>
         </div>
         
         <Credits
@@ -106,7 +108,18 @@ export default {
     UnitMap
   },
   methods: {
-
+    showLog() {
+      if (this.campaign && this.faction) {
+        fetch(this.apiUrl+'/factionmanager-api/factions/'+this.faction+'/campaigns/'+this.campaign+'/flightlog', {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer'+localStorage.token,
+          }
+        })
+        .then(r => r.json())
+        .then(strings => console.log(strings));
+      }
+    }
   },
   watch: {
     faction(val) {
