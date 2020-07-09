@@ -118,9 +118,9 @@ export default {
     basketSumAlgeb(name, num) {
       var count = this.basket[name]
       count = count ? count : 0
-      count = count + num
+      count = parseInt(count) + parseInt(num)
       if (count > 0) {
-        this.$set(this.basket, this.selectedItem, count)
+        this.$set(this.basket, name, count)
       } else {
         delete this.basket[name]
       }
