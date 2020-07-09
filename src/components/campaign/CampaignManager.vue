@@ -6,12 +6,7 @@
             :apiUrl="apiUrl"
             :selection.sync="campaign"/>
       </div>
-      <div class="md-layout-item md-size-15">
-        <ContextSelector type="faction"
-            :apiUrl="apiUrl"
-            :campaign="campaign"
-            :selection.sync="faction"/>
-      </div>
+      
       <div class="md-layout-item md-size-15">
         State {{state}}
         <br/>
@@ -23,14 +18,23 @@
           Password: {{serverinfo.password}}
         </div>
       </div>
+      
+      <div class="md-layout-item md-size-15">
+        <ContextSelector type="faction"
+          :apiUrl="apiUrl"
+          :campaign="campaign"
+          :selection.sync="faction"/>
+      </div>
+      <div class="md-layout-item md-size-50">
+        <CampaignGiveCredits
+          :apiUrl="apiUrl"
+          :campaign="campaign"
+          :faction="faction"/>
+      </div>
     </div>
 
     <md-button @click="downloadMission">Download MIZ</md-button>
     
-    <CampaignGiveCredits
-      :apiUrl="apiUrl"
-      :campaign="campaign"
-      :faction="faction"/>
 
     <div class="md-layout md-gutter md-alignment-top-left">
       <div class="md-layout-item md-size-15">
@@ -60,6 +64,10 @@ export default {
   props: {
     apiUrl: {
       type: String,
+      required: true
+    },
+    isManager: {
+      type: Boolean,
       required: true
     }
   },

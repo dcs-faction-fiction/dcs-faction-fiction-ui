@@ -135,7 +135,7 @@ export default {
           'Authorization': 'Bearer '+localStorage.token
         },
       })
-      .then(resp => resp.json())
+      .then(resp => resp.ok ? resp.json() : [])
       .then(data => {
         var result = {}
         data.forEach(u => result[u.id] = u)

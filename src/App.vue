@@ -6,65 +6,24 @@
       :isFactionManager.sync="isFactionManager"
       :isCampaignManager.sync="isCampaignManager"/>
 
-    <md-tabs v-show="loggedIn">
+    <md-tabs v-show="loggedIn" :md-active-tab="isFactionManager ? 'factionManager' : 'campaignManager'">
       
-      <md-tab v-show="isFactionManager" :md-disabled="!isFactionManager" md-label="Faction manager">
-
-        <div class="md-layout md-gutter md-alignment-top-left">
-          <div class="md-layout-item md-size-15">
-            <ContextSelector type="faction"
-                :apiUrl="apiUrl"
-                :selection.sync="faction"/>
-          </div>
-          <div class="md-layout-item md-size-15">
-            <ContextSelector type="campaign"
-                :apiUrl="apiUrl"
-                :faction="faction"
-                :selection.sync="campaign"/>
-          </div>
-          <div class="md-layout-item">
-            <button @click="showLog">LOG</button>
-          </div>
-        </div>
-        
-        <Credits
+      <md-tab id="factionManager"
+        v-show="isFactionManager"
+       :md-disabled="!isFactionManager"
+        md-label="Faction manager">
+        <FactionManager
           :apiUrl="apiUrl"
-          :faction="faction"
-          :campaign="campaign"/>
-
-        <div class="md-layout md-gutter md-alignment-top-left">
-          <div class="md-layout-item">
-            <Airbase
-              :apiUrl="apiUrl"
-              :campaign="campaign"
-              :faction="faction"
-              :airbase.sync="airbase"/>
-          </div>
-          <div class="md-layout-item">
-            <Basket
-              :apiUrl="apiUrl"
-              :campaign="campaign"
-              :faction="faction"/>
-            
-          </div>
-        </div>
-
-        <Units
-          :apiUrl="apiUrl"
-          :faction="faction"
-          :campaign="campaign"
-          :units.sync="units"/>
-        <UnitMap
-          :apiUrl="apiUrl"
-          :campaign="campaign"
-          :faction="faction"
-          :airbase="airbase"
-          :units.sync="units"/>
+          :isManager="isFactionManager"/>
       </md-tab>
 
-      <md-tab v-show="isCampaignManager" :md-disabled="!isCampaignManager" md-label="Campaign manager">
+      <md-tab id="campaignManager"
+        v-show="isCampaignManager"
+       :md-disabled="!isCampaignManager"
+        md-label="Campaign manager">
         <CampaignManager
-          :apiUrl="apiUrl"/>
+          :apiUrl="apiUrl"
+          :isManager="isCampaignManager"/>
       </md-tab>
 
     </md-tabs>
@@ -73,65 +32,36 @@
 
 <script>
 import JWTProvider from './components/JWTProvider.vue'
-import ContextSelector from './components/ContextSelector.vue'
-
 import CampaignManager from './components/campaign/CampaignManager.vue'
-
-import Airbase from './components/faction/Airbase.vue'
-import Units from './components/faction/Units.vue'
-import Basket from './components/faction/Basket.vue'
-import Credits from './components/faction/Credits.vue'
-import UnitMap from './components/faction/UnitMap.vue'
+import FactionManager from './components/faction/FactionManager.vue'
 
 export default {
   name: 'App',
+  components: {
+    JWTProvider,
+    CampaignManager,
+    FactionManager,
+  },
   data() {
     return {
       apiUrl: 'https://95.216.78.27:8443',
       loggedIn: false,
       isFactionManager: false,
-      isCampaignManager: false,
-      faction: localStorage.faction,
-      campaign: localStorage.campaign,
-      airbase: localStorage.airbase,
-      units: {},
-    }
-  },
-  components: {
-    JWTProvider,
-    CampaignManager,
-    ContextSelector,
-    Airbase,
-    Units,
-    Basket,
-    Credits,
-    UnitMap
-  },
-  methods: {
-    showLog() {
-      if (this.campaign && this.faction) {
-        fetch(this.apiUrl+'/factionmanager-api/factions/'+this.faction+'/campaigns/'+this.campaign+'/flightlog', {
-          method: 'GET',
-          headers: {
-            'Authorization': 'Bearer'+localStorage.token,
-          }
-        })
-        .then(r => r.json())
-        .then(strings => console.log(strings));
-      }
+      isCampaignManager: false
     }
   },
   watch: {
-    faction(val) {
-      localStorage.faction = val
+    isFactionManager(value) {
+      if (!value) {
+        delete localStorage.faction
+        delete localStorage.campaign
+      }
     },
-    campaign(val) {
-      localStorage.campaign = val
-    },
-    airbase(val) {
-      localStorage.airbase = val
-    },
-    units() {
+    isCampaignManager(value) {
+      if (!value) {
+        delete localStorage.campaignManagerCampaign
+        delete localStorage.campaignManagerFaction
+      }
     }
   }
 }

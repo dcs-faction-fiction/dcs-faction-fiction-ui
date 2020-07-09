@@ -66,7 +66,7 @@ export default {
           'Authorization': 'Bearer '+localStorage.token
         },
       })
-      .then(resp => resp.json())
+      .then(resp => resp.ok ? resp.json() : [])
       .then(dataTransformer)
       .then(data => this.options = data)
       .catch(err => console.log(err))
