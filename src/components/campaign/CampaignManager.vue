@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     poll() {
-      if (!this.campaign || !this.faction) {
+      if (!this.isManager || !this.campaign || !this.faction) {
         return
       }
 
